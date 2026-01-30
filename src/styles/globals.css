@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  /* Design Tokens */
+  --color-primary: #0A2463;
+  --color-primary-foreground: #FFFFFF;
+
+  --color-secondary: #D4AF37;
+  --color-secondary-foreground: #FFFFFF;
+
+  --color-tertiary: #2E8B57;
+  --color-tertiary-foreground: #FFFFFF;
+
+  --color-background: #FAFAFA;
+  --color-foreground: #2D3436;
+
+  --color-muted: #F3F4F6;
+  --color-muted-foreground: #6B7280;
+
+  --color-border: #E0E0E0;
+  --color-input: #E0E0E0;
+
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  /* Coral */
+  --color-destructive: #EF4444;
+  --color-destructive-foreground: #FFFFFF;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --radius-lg: 0.5rem;
+  --radius-md: 0.375rem;
+  --radius-sm: 0.25rem;
+
+  /* Animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0
+    }
+
+    to {
+      height: var(--radix-accordion-content-height)
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height)
+    }
+
+    to {
+      height: 0
+    }
+  }
+
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-marquee2: marquee2 25s linear infinite;
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes marquee2 {
+    0% {
+      transform: translateX(100%);
+    }
+
+    100% {
+      transform: translateX(0%);
+    }
+  }
+}
+
+/* Base Styles */
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    /* FAFAFA */
+    --foreground: 210 9% 19%;
+    /* 2D3436 converted approx or just use hex above via theme */
+    /* Note: Tailwind v4 theme variables are used directly as CSS variables if defined in @theme. 
+       However, shadcn usually expects HSL variables for opacity modifiers. 
+       For this prompt, I will stick to the Hex definitions in @theme for simplicity unless I need opacity.
+       The user wants specific hex codes.
+    */
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif font-bold text-primary;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
+}
