@@ -53,7 +53,7 @@ const item = {
 
 export function Services() {
     return (
-        <section id="services" className="py-32 bg-white relative overflow-hidden">
+        <section id="services" className="py-32 bg-white relative overflow-hidden scroll-mt-28">
             {/* Background Pattern */}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]" />
 

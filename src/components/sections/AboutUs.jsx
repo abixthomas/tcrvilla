@@ -13,7 +13,7 @@ const stats = [
 
 export function AboutUs() {
     return (
-        <section id="about" className="py-24 bg-white overflow-hidden">
+        <section id="about" className="py-24 bg-white overflow-hidden scroll-mt-28">
             <div className="container mx-auto px-4">
                 <div className="flex flex-col lg:flex-row gap-16 items-center">
 

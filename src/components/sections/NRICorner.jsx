@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 export function NRICorner() {
     return (
-        <section className="py-24 bg-gradient-to-b from-blue-50 to-white overflow-hidden relative">
+        <section id="nri-corner" className="py-24 bg-gradient-to-b from-blue-50 to-white overflow-hidden relative scroll-mt-28">
             <div className="absolute top-0 right-0 w-1/3 h-full bg-[url('https://www.transparenttextures.com/patterns/world-map.png')] opacity-10 pointer-events-none" />
 
             <div className="container mx-auto px-4 relative z-10">

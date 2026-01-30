@@ -66,9 +66,10 @@ export function Footer() {
                         <h4 className="text-lg font-bold">Stay Updated</h4>
                         <p className="text-gray-300 text-sm">Subscribe to our newsletter for the latest property news.</p>
                         <div className="flex gap-2">
-                            <div className="flex-1 relative">
+                            <div className="flex-1 relative" suppressHydrationWarning={true}>
                                 <input
                                     type="email"
+                                    data-lpignore="true"
                                     placeholder="Email Address"
                                     className="bg-white/10 border border-white/20 rounded-md px-4 py-2 text-sm w-full focus:outline-none focus:border-secondary text-white placeholder:text-gray-400"
                                 />

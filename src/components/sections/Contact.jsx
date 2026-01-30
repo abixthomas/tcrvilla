@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 
 export function Contact() {
     return (
-        <section id="contact" className="py-24 bg-gray-50">
+        <section id="contact" className="py-24 bg-gray-50 scroll-mt-28">
             <div className="container mx-auto px-4">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h4 className="text-secondary font-bold uppercase tracking-widest text-sm mb-2">Get In Touch</h4>
@@ -29,13 +29,13 @@ export function Contact() {
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-700">First Name</label>
                                     <div className="relative" suppressHydrationWarning={true}>
-                                        <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-secondary focus:ring-0 outline-none transition-colors" placeholder="John" />
+                                        <input type="text" data-lpignore="true" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-secondary focus:ring-0 outline-none transition-colors" placeholder="John" />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-700">Last Name</label>
                                     <div className="relative" suppressHydrationWarning={true}>
-                                        <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-secondary focus:ring-0 outline-none transition-colors" placeholder="Doe" />
+                                        <input type="text" data-lpignore="true" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-secondary focus:ring-0 outline-none transition-colors" placeholder="Doe" />
                                     </div>
                                 </div>
                             </div>
@@ -43,14 +43,14 @@ export function Contact() {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">Email Address</label>
                                 <div className="relative" suppressHydrationWarning={true}>
-                                    <input type="email" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-secondary focus:ring-0 outline-none transition-colors" placeholder="john@example.com" />
+                                    <input type="email" data-lpignore="true" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-secondary focus:ring-0 outline-none transition-colors" placeholder="john@example.com" />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">Message</label>
                                 <div className="relative" suppressHydrationWarning={true}>
-                                    <textarea rows={4} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-secondary focus:ring-0 outline-none transition-colors" placeholder="I'm interested in..." />
+                                    <textarea rows={4} data-lpignore="true" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-secondary focus:ring-0 outline-none transition-colors" placeholder="I'm interested in..." />
                                 </div>
                             </div>
 

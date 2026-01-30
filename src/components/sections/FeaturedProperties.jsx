@@ -17,7 +17,7 @@ const container = {
 
 export function FeaturedProperties() {
     return (
-        <section id="properties" className="py-32 bg-gray-50/50 relative overflow-hidden">
+        <section id="properties" className="py-32 bg-gray-50/50 relative overflow-hidden scroll-mt-28">
             {/* Decor Elements */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
