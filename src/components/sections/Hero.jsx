@@ -1,129 +1,136 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { HeroSearch } from "./HeroSearch"
-import { useRef } from "react"
+import { useState, useEffect } from "react"
+import { ArrowRight, Star } from "lucide-react"
+
+const HERO_IMAGES = [
+    "https://images.unsplash.com/photo-1600596542815-2a4d04774c13?q=80&w=2075&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop"
+]
 
 export function Hero() {
-    const ref = useRef(null)
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start start", "end start"]
-    })
+    const [currentImage, setCurrentImage] = useState(0)
+    const [prevImage, setPrevImage] = useState(0)
 
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-    const opacity = useTransform(scrollYProgress, [0, 1], [1, 0])
-    const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1])
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentImage((current) => {
+                setPrevImage(current)
+                return (current + 1) % HERO_IMAGES.length
+            })
+        }, 7000)
+        return () => clearInterval(timer)
+    }, [])
 
     return (
-        <section ref={ref} className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
-            {/* Background with Parallax/Zoom effect */}
-            <motion.div
-                style={{ y, scale, opacity }}
-                className="absolute inset-0 z-0"
-            >
-                <motion.div
-                    initial={{ scale: 1.2 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 2, ease: "easeOut" }}
-                    className="w-full h-full relative"
-                >
-                    <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="object-cover w-full h-full"
-                        poster="https://images.unsplash.com/photo-1600596542815-2a4d04774c13?q=80&w=2075&auto=format&fit=crop"
-                    >
-                        <source src="https://videos.pexels.com/video-files/3770033/3770033-uhd_2560_1440_25fps.mp4" type="video/mp4" />
-                        <img
-                            src="https://images.unsplash.com/photo-1600596542815-2a4d04774c13?q=80&w=2075&auto=format&fit=crop"
-                            alt="Luxury Villa in Kerala"
-                            className="object-cover w-full h-full"
-                        />
-                    </video>
-                    {/* Enhanced Overlay with Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-primary/30 via-black/20 to-black/80 mix-blend-multiply" />
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse" />
-                </motion.div>
-            </motion.div>
+        <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-black">
 
-            {/* Content */}
-            <div className="relative z-10 container mx-auto px-4 text-center text-white">
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, ease: "easeOut" }}
-                    className="mb-8"
-                >
+            {/* Dynamic Background Slider - Stacked Approach to prevent blackout */}
+            <div className="absolute inset-0 z-0">
+                {HERO_IMAGES.map((img, idx) => (
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className="inline-block border border-white/20 backdrop-blur-md rounded-full px-4 py-1 mb-6 bg-white/5"
+                        key={idx}
+                        // Z-Index: Current gets 2 (top), Previous gets 1 (middle), Others 0 (bottom)
+                        style={{ zIndex: idx === currentImage ? 2 : idx === prevImage ? 1 : 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={{
+                            // Opacity: Current fades in (1). Previous STAYS (1). Others hide (0).
+                            opacity: idx === currentImage || idx === prevImage ? 1 : 0,
+                            scale: idx === currentImage ? 1.05 : 1.15,
+                        }}
+                        transition={{
+                            // Only animate opacity for the NEW image. Previous image should essentially stay solid.
+                            opacity: { duration: 1.5, ease: "easeInOut" },
+                            scale: { duration: 7, ease: "linear" }
+                        }}
+                        className="absolute inset-0"
                     >
-                        <span className="text-secondary font-bold uppercase tracking-[0.2em] text-xs">The Gold Standard in Real Estate</span>
+                        <img
+                            src={img}
+                            alt={`Luxury Slide ${idx}`}
+                            className="w-full h-full object-cover"
+                        />
+                        {/* Premium Gradient Overlay PER IMAGE to ensure consistency */}
+                        {/* Premium Gradient Overlay PER IMAGE to ensure consistency - Ligthened to fix black screen */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/60" />
+                    </motion.div>
+                ))}
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-20" />
+            </div>
+
+            {/* Content Container */}
+            <div className="relative z-10 container mx-auto px-4 text-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                    className="flex flex-col items-center pt-32 md:pt-40"
+                >
+                    {/* Badge Removed */}
+
+
+                    {/* Main Heading with Premium Typography */}
+                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-10 leading-relaxed tracking-wider drop-shadow-2xl uppercase max-w-5xl mx-auto">
+                        Experience Luxury <br className="hidden md:block" />
+                        <span className="text-white/90">
+                            Beyond Boundaries
+                        </span>
+                    </h1>
+
+                    {/* Subheading Removed as per request */}
+
+                    {/* Search Component Wrapper */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.2, duration: 0.8 }}
+                        className="w-full max-w-4xl"
+                    >
+                        <HeroSearch />
                     </motion.div>
 
-                    <motion.h1
-                        initial={{ opacity: 0, letterSpacing: "0.2em" }}
-                        animate={{ opacity: 1, letterSpacing: "-0.02em" }}
-                        transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
-                        className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold mb-6 tracking-tight drop-shadow-2xl leading-none"
-                    >
-                        Luxury <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-amber-200 to-secondary animate-gradient-x bg-[length:200%_auto]">Beyond</span> <br />
-                        Boundaries
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
+                    {/* Integrated Stats Bar */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1, duration: 1 }}
-                        className="text-lg md:text-2xl text-gray-200/90 max-w-3xl mx-auto font-light leading-relaxed font-sans"
+                        transition={{ delay: 1.5, duration: 0.8 }}
+                        className="mt-16 hidden md:grid grid-cols-3 divide-x divide-white/20 bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl px-8 py-6 w-full max-w-3xl"
                     >
-                        Curating the finest waterfront villas and sky-high residences in Thrissur.
-                    </motion.p>
-                </motion.div>
+                        {[
+                            { label: "Active Listings", value: "500+" },
+                            { label: "Trusted Agents", value: "50+" },
+                            { label: "Happy Families", value: "1.2k+" },
+                        ].map((stat, i) => (
+                            <div key={i} className="px-8 text-center group hover:bg-white/5 transition-colors rounded-lg py-2">
+                                <div className="text-4xl font-serif font-bold text-white mb-1 group-hover:text-secondary transition-colors">
+                                    {stat.value}
+                                </div>
+                                <div className="text-[10px] font-medium text-gray-400 uppercase tracking-widest">
+                                    {stat.label}
+                                </div>
+                            </div>
+                        ))}
+                    </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 60, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 1.5, type: "spring", bounce: 0.4 }}
-                >
-                    <HeroSearch />
-                </motion.div>
-
-                {/* Stats */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 2 }}
-                    className="mt-20 hidden md:inline-flex flex-wrap justify-center gap-12 md:gap-24 text-center border-t border-white/10 pt-8 backdrop-blur-md bg-black/10 rounded-full px-16 py-6 border border-white/5"
-                >
-                    {[
-                        { label: "Active Listings", value: "500+" },
-                        { label: "Trusted Agents", value: "50+" },
-                        { label: "Happy Families", value: "1200+" },
-                    ].map((stat, i) => (
-                        <div key={i} className="flex flex-col transform hover:scale-110 transition-transform duration-300 group">
-                            <span className="text-3xl md:text-4xl font-bold text-white font-serif group-hover:text-secondary transition-colors">{stat.value}</span>
-                            <span className="text-[10px] text-gray-300 font-bold uppercase tracking-[0.2em] mt-1">{stat.label}</span>
-                        </div>
-                    ))}
                 </motion.div>
             </div>
 
-            {/* Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 3, duration: 1 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/50"
-            >
-                <span className="text-[10px] uppercase tracking-widest mb-2">Scroll to Explore</span>
-                <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
-            </motion.div>
+            {/* Pagination Dots */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+                {HERO_IMAGES.map((_, idx) => (
+                    <button
+                        key={idx}
+                        onClick={() => setCurrentImage(idx)}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${currentImage === idx ? "w-8 bg-secondary" : "bg-white/50 hover:bg-white"
+                            }`}
+                        aria-label={`Go to slide ${idx + 1}`}
+                    />
+                ))}
+            </div>
         </section>
     )
 }

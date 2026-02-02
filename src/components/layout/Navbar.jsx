@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 
 const navItems = [
     { name: "Home", href: "/" },
-    { name: "Properties", href: "#properties" },
+    { name: "Properties", href: "/properties" },
     { name: "Services", href: "#services" },
     { name: "NRI Corner", href: "#nri-corner" },
     { name: "About", href: "#about" },
@@ -62,23 +62,21 @@ export function Navbar() {
                 <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
                     {/* Logo Area */}
                     <Link href="/" className="flex flex-col group">
-                        <div className="flex items-center gap-2">
-                            {/* Logo Icon */}
-                            <div className={cn(
-                                "p-2 rounded-lg transition-all duration-300",
-                                isScrolled ? "bg-primary text-white" : "bg-white text-primary"
-                            )}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6">
-                                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M9 22V12H15V22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
+                        <div className="flex items-center gap-3">
+                            {/* Image Logo */}
+                            <div className="relative h-14 w-auto md:h-16 transition-all duration-300">
+                                <img
+                                    src="/logo.png"
+                                    alt="Thrissur Villas Logo"
+                                    className="h-full w-auto object-contain"
+                                />
                             </div>
 
-                            {/* Text Logo */}
+                            {/* Text Logo - Restored */}
                             <div>
                                 <h1 className={cn(
-                                    "font-serif font-bold text-2xl leading-none tracking-tight",
-                                    isScrolled ? "text-primary" : "text-white"
+                                    "font-serif font-bold text-xl md:text-2xl leading-none tracking-tight hidden md:block",
+                                    isScrolled ? "text-primary" : "text-white drop-shadow-md"
                                 )}>
                                     Thrissur Villas
                                 </h1>

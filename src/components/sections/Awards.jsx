@@ -14,7 +14,7 @@ export function Awards() {
             </div>
 
             <div className="relative flex overflow-x-hidden group">
-                <div className="animate-marquee whitespace-nowrap flex items-center gap-16">
+                <div className="animate-marquee whitespace-nowrap flex items-center gap-16 group-hover:[animation-play-state:paused]">
                     {partners.concat(partners).map((partner, i) => (
                         <div key={i} className="flex items-center gap-2 text-white/40 font-bold text-2xl font-serif hover:text-white transition-colors cursor-default">
                             <Award className="h-6 w-6 opacity-50" />
@@ -23,7 +23,7 @@ export function Awards() {
                     ))}
                 </div>
 
-                <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center gap-16">
+                <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center gap-16 group-hover:[animation-play-state:paused]">
                     {partners.concat(partners).map((partner, i) => (
                         <div key={i} className="flex items-center gap-2 text-white/40 font-bold text-2xl font-serif hover:text-white transition-colors cursor-default">
                             <Award className="h-6 w-6 opacity-50" />

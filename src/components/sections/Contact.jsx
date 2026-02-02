@@ -6,6 +6,14 @@ import { MapPin, Phone, Mail, Clock, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function Contact() {
+    const [mounted, setMounted] = React.useState(false)
+
+    React.useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    if (!mounted) return null
+
     return (
         <section id="contact" className="py-24 bg-gray-50 scroll-mt-28">
             <div className="container mx-auto px-4">
@@ -24,7 +32,7 @@ export function Contact() {
                     {/* Contact Form */}
                     <div className="p-8 md:p-12">
                         <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">Send us a Message</h3>
-                        <form className="space-y-6" suppressHydrationWarning={true}>
+                        <form className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-700">First Name</label>

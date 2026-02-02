@@ -9,8 +9,10 @@ export function EMICalculator() {
     const [rate, setRate] = useState(8.5)
     const [tenure, setTenure] = useState(20)
     const [emi, setEmi] = useState(0)
+    const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
+        setMounted(true)
         // EMI Calculation Formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
         const r = rate / 12 / 100
         const n = tenure * 12
@@ -41,81 +43,91 @@ export function EMICalculator() {
                             Plan your finances with our easy-to-use home loan calculator. Get an estimate of your monthly installments instantly.
                         </p>
 
+
                         <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 shadow-lg">
-                            {/* Loan Amount */}
-                            <div className="mb-8">
-                                <div className="flex justify-between mb-4">
-                                    <label className="font-bold text-gray-700 flex items-center gap-2">
-                                        <DollarSign className="h-4 w-4 text-secondary" /> Loan Amount
-                                    </label>
-                                    <span className="text-primary font-bold bg-white px-3 py-1 rounded-md shadow-sm border border-gray-100">
-                                        {formatCurrency(amount)}
-                                    </span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="1000000"
-                                    max="50000000"
-                                    step="100000"
-                                    value={amount}
-                                    onChange={(e) => setAmount(Number(e.target.value))}
-                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-secondary"
-                                />
-                                <div className="flex justify-between text-xs text-gray-400 mt-2">
-                                    <span>₹10L</span>
-                                    <span>₹5Cr</span>
-                                </div>
-                            </div>
+                            {/* Mounted check for inputs */}
+                            {mounted ? (
+                                <>
+                                    {/* Loan Amount */}
+                                    <div className="mb-8">
+                                        <div className="flex justify-between mb-4">
+                                            <label className="font-bold text-gray-700 flex items-center gap-2">
+                                                <DollarSign className="h-4 w-4 text-secondary" /> Loan Amount
+                                            </label>
+                                            <span className="text-primary font-bold bg-white px-3 py-1 rounded-md shadow-sm border border-gray-100">
+                                                {formatCurrency(amount)}
+                                            </span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="1000000"
+                                            max="50000000"
+                                            step="100000"
+                                            value={amount}
+                                            onChange={(e) => setAmount(Number(e.target.value))}
+                                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-secondary"
+                                        />
+                                        <div className="flex justify-between text-xs text-gray-400 mt-2">
+                                            <span>₹10L</span>
+                                            <span>₹5Cr</span>
+                                        </div>
+                                    </div>
 
-                            {/* Interest Rate */}
-                            <div className="mb-8">
-                                <div className="flex justify-between mb-4">
-                                    <label className="font-bold text-gray-700 flex items-center gap-2">
-                                        <Percent className="h-4 w-4 text-secondary" /> Interest Rate
-                                    </label>
-                                    <span className="text-primary font-bold bg-white px-3 py-1 rounded-md shadow-sm border border-gray-100">
-                                        {rate}%
-                                    </span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="5"
-                                    max="15"
-                                    step="0.1"
-                                    value={rate}
-                                    onChange={(e) => setRate(Number(e.target.value))}
-                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-secondary"
-                                />
-                                <div className="flex justify-between text-xs text-gray-400 mt-2">
-                                    <span>5%</span>
-                                    <span>15%</span>
-                                </div>
-                            </div>
+                                    {/* Interest Rate */}
+                                    <div className="mb-8">
+                                        <div className="flex justify-between mb-4">
+                                            <label className="font-bold text-gray-700 flex items-center gap-2">
+                                                <Percent className="h-4 w-4 text-secondary" /> Interest Rate
+                                            </label>
+                                            <span className="text-primary font-bold bg-white px-3 py-1 rounded-md shadow-sm border border-gray-100">
+                                                {rate}%
+                                            </span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="5"
+                                            max="15"
+                                            step="0.1"
+                                            value={rate}
+                                            onChange={(e) => setRate(Number(e.target.value))}
+                                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-secondary"
+                                        />
+                                        <div className="flex justify-between text-xs text-gray-400 mt-2">
+                                            <span>5%</span>
+                                            <span>15%</span>
+                                        </div>
+                                    </div>
 
-                            {/* Tenure */}
-                            <div className="mb-2">
-                                <div className="flex justify-between mb-4">
-                                    <label className="font-bold text-gray-700 flex items-center gap-2">
-                                        <Calendar className="h-4 w-4 text-secondary" /> Tenure (Years)
-                                    </label>
-                                    <span className="text-primary font-bold bg-white px-3 py-1 rounded-md shadow-sm border border-gray-100">
-                                        {tenure} Years
-                                    </span>
+                                    {/* Tenure */}
+                                    <div className="mb-2">
+                                        <div className="flex justify-between mb-4">
+                                            <label className="font-bold text-gray-700 flex items-center gap-2">
+                                                <Calendar className="h-4 w-4 text-secondary" /> Tenure (Years)
+                                            </label>
+                                            <span className="text-primary font-bold bg-white px-3 py-1 rounded-md shadow-sm border border-gray-100">
+                                                {tenure} Years
+                                            </span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="1"
+                                            max="30"
+                                            step="1"
+                                            value={tenure}
+                                            onChange={(e) => setTenure(Number(e.target.value))}
+                                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-secondary"
+                                        />
+                                        <div className="flex justify-between text-xs text-gray-400 mt-2">
+                                            <span>1 Year</span>
+                                            <span>30 Years</span>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="h-[400px] flex items-center justify-center text-gray-400">
+                                    Loading calculator...
                                 </div>
-                                <input
-                                    type="range"
-                                    min="1"
-                                    max="30"
-                                    step="1"
-                                    value={tenure}
-                                    onChange={(e) => setTenure(Number(e.target.value))}
-                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-secondary"
-                                />
-                                <div className="flex justify-between text-xs text-gray-400 mt-2">
-                                    <span>1 Year</span>
-                                    <span>30 Years</span>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
 

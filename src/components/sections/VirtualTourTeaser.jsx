@@ -37,7 +37,12 @@ export function VirtualTourTeaser() {
                         Experience every corner, every detail, and every view before you even step inside. Our 8K Virtual Tours bring properties to life.
                     </p>
 
-                    <button className="group relative inline-flex items-center justify-center p-4 px-8 py-4 overflow-hidden font-medium text-white transition duration-300 ease-out border-2 border-secondary rounded-full shadow-md group">
+                    <a
+                        href="https://www.youtube.com/@thrissurvillas"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative inline-flex items-center justify-center p-4 px-8 py-4 overflow-hidden font-medium text-white transition duration-300 ease-out border-2 border-secondary rounded-full shadow-md group"
+                    >
                         <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-secondary group-hover:translate-x-0 ease">
                             <Play className="w-6 h-6 fill-current" />
                         </span>
@@ -45,7 +50,7 @@ export function VirtualTourTeaser() {
                             Start Virtual Tour
                         </span>
                         <span className="relative invisible">Start Virtual Tour</span>
-                    </button>
+                    </a>
                 </motion.div>
             </div>
 

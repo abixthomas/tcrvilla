@@ -1,18 +1,18 @@
 
-import { Inter, Playfair_Display } from "next/font/google";
+import { Montserrat, Open_Sans } from "next/font/google";
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
-const inter = Inter({
-  variable: "--font-inter",
+const sans = Open_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const serif = Montserrat({
+  variable: "--font-serif",
   subsets: ["latin"],
   display: "swap",
 });
@@ -28,8 +28,8 @@ export default function RootLayout({ children }) {
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          inter.variable,
-          playfair.variable
+          sans.variable,
+          serif.variable
         )}
       >
         <Navbar />

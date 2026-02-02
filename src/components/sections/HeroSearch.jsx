@@ -10,23 +10,7 @@ export function HeroSearch() {
 
     return (
         <div className="w-full max-w-4xl mx-auto">
-            {/* Tabs */}
-            <div className="flex justify-center mb-4 gap-2">
-                {["buy", "rent", "sell"].map((tab) => (
-                    <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={cn(
-                            "px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 backdrop-blur-sm",
-                            activeTab === tab
-                                ? "bg-secondary text-white shadow-lg scale-105"
-                                : "bg-white/20 text-white hover:bg-white/30"
-                        )}
-                    >
-                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                    </button>
-                ))}
-            </div>
+            {/* Tabs Removed as per client request */}
 
             {/* Main Search Bar */}
             <div className="bg-white rounded-2xl p-4 shadow-2xl flex flex-col md:flex-row items-center gap-4 animate-in fade-in zoom-in duration-500">
@@ -87,7 +71,7 @@ export function HeroSearch() {
                     <Button variant="outline" size="icon" className="h-14 w-14 rounded-xl border-gray-200 hover:bg-gray-50 hover:text-primary">
                         <SlidersHorizontal className="h-5 w-5" />
                     </Button>
-                    <Button variant="gradient" className="h-14 rounded-xl px-8 flex-1 md:flex-none text-lg font-medium shadow-primary/20 hover:shadow-primary/40">
+                    <Button className="h-14 rounded-xl px-8 flex-1 md:flex-none text-lg font-medium bg-secondary text-white hover:bg-secondary/90 shadow-lg shadow-secondary/20">
                         Search
                     </Button>
                 </div>
