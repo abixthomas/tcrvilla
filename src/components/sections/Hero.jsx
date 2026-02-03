@@ -27,23 +27,39 @@ export function Hero() {
     }, [])
 
     return (
-        <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-black">
+        <section
+            className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-gray-900"
+            style={{
+                backgroundImage: 'url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=400&auto=format&fit=crop")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }}
+        >
 
-            {/* Dynamic Background Slider - Stacked Approach to prevent blackout */}
+            {/* STATIC FALLBACK (Immediate Load) - Using direct IMG tag for browser preloader priority */}
+            <div className="absolute inset-0 z-0">
+                <img
+                    src={HERO_IMAGES[0]}
+                    alt="Background Fallback"
+                    className="w-full h-full object-cover"
+                    loading="eager"
+                    priority="true"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/60" />
+            </div>
+
+            {/* Dynamic Background Slider - Stacked Approach */}
             <div className="absolute inset-0 z-0">
                 {HERO_IMAGES.map((img, idx) => (
                     <motion.div
                         key={idx}
-                        // Z-Index: Current gets 2 (top), Previous gets 1 (middle), Others 0 (bottom)
-                        style={{ zIndex: idx === currentImage ? 2 : idx === prevImage ? 1 : 0 }}
-                        initial={{ opacity: 0 }}
+                        style={{ zIndex: idx === currentImage ? 2 : 1 }}
+                        initial={false} // Disable initial animation to prevent flash
                         animate={{
-                            // Opacity: Current fades in (1). Previous STAYS (1). Others hide (0).
-                            opacity: idx === currentImage || idx === prevImage ? 1 : 0,
+                            opacity: idx === currentImage ? 1 : 0,
                             scale: idx === currentImage ? 1.05 : 1.15,
                         }}
                         transition={{
-                            // Only animate opacity for the NEW image. Previous image should essentially stay solid.
                             opacity: { duration: 1.5, ease: "easeInOut" },
                             scale: { duration: 7, ease: "linear" }
                         }}
@@ -52,10 +68,9 @@ export function Hero() {
                         <img
                             src={img}
                             alt={`Luxury Slide ${idx}`}
+                            loading="eager"
                             className="w-full h-full object-cover"
                         />
-                        {/* Premium Gradient Overlay PER IMAGE to ensure consistency */}
-                        {/* Premium Gradient Overlay PER IMAGE to ensure consistency - Ligthened to fix black screen */}
                         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/60" />
                     </motion.div>
                 ))}

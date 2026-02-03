@@ -1,4 +1,3 @@
-
 import { Hero } from "@/components/sections/Hero";
 import { FeaturedProperties } from "@/components/sections/FeaturedProperties";
 import { Services } from "@/components/sections/Services";

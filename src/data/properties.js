@@ -17,7 +17,8 @@ const TITLES = [
 const AMENITIES_POOL = [
     "Swimming Pool", "Home Theater", "Smart Automation", "Private Garden",
     "Helipad Access", "Golf Course View", "Italian Marble", "Solar Powered",
-    "VRV AC System", "Butler Service", "Infinity Edge", "Rooftop Party Area"
+    "VRV AC System", "Butler Service", "Infinity Edge", "Rooftop Party Area",
+    "Gym", "Security", "Parking", "Wi-Fi", "Power Backup"
 ];
 
 // Curated high-quality Unsplash Collections for variety
@@ -72,7 +73,9 @@ const generateProperties = () => {
             location: location,
             price: price,
             bhk: (i % 5) + 2, // 2 to 6 BHK
+            baths: (i % 5) + 2, // Matches BHK for simplicity
             sqft: 1200 + (i * 85),
+            landArea: 5 + (i % 20), // In Cents (5 - 24 cents)
             status: i % 7 === 0 ? "Hot Deal" : i % 5 === 0 ? "Featured" : "New",
             images: images,
             amenities: amenities,

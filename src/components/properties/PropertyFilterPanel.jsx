@@ -1,348 +1,377 @@
 "use client"
 
-import { useState } from "react"
+import * as React from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, X, ChevronDown, ChevronUp, Check, Filter } from "lucide-react"
+import * as Slider from "@radix-ui/react-slider"
+import * as Accordion from "@radix-ui/react-accordion"
+import { Search, X, ChevronDown, Check, Filter, MapPin, Sparkles, MoveRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-// import { propertiesData } from "@/data/properties" // Not directly needed, parent controls filter state
 
+// --- UTILS ---
+const formatCurrency = (val) => {
+    if (val >= 100) return `₹${(val / 100).toFixed(2)}Cr`
+    return `₹${val}L`
+}
+
+const formatLand = (val, unit) => {
+    if (unit === 'acre') return `${(val / 100).toFixed(2)} Ac`
+    return `${Math.round(val)} Cents`
+}
+
+// --- DUMMY DATA ---
 const LOCATIONS = [
     "Punkunnam", "Viyyur", "Kuttoor", "Puthur", "M.G. Road",
     "Ayyanthole", "Mannuthy", "Ollur", "Amala Nagar", "Sobha City Area"
 ]
 
-const PROPERTY_TYPES = ["Villa", "Apartment", "Plot", "Farmhouse"]
+const LAND_HISTOGRAM_DATA = [10, 25, 45, 30, 60, 80, 50, 40, 20, 15, 5, 10, 25, 45, 30, 60, 80, 50, 40, 20] // 20 bars
 
-const AMENITIES_LIST = [
-    "Swimming Pool", "Gym", "Private Garden", "Power Backup",
-    "Security", "Parking", "Wi-Fi", "Home Theater"
-]
+// --- COMPONENTS ---
 
-export function PropertyFilterPanel({ filters, setFilters, totalCount, filteredCount }) {
-    // Accordion States
-    const [openSections, setOpenSections] = useState({
-        location: true,
-        price: true,
-        type: true,
-        amenities: false
-    })
+const FilterSection = ({ value, title, icon: Icon, children }) => (
+    <Accordion.Item value={value} className="border-b border-white/10 last:border-0">
+        <Accordion.Header>
+            <Accordion.Trigger className="w-full flex items-center justify-between py-5 px-1 group">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-slate-100 group-hover:bg-red-50 text-slate-400 group-hover:text-red-500 transition-colors">
+                        <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="text-sm font-semibold text-slate-700 tracking-wide group-hover:text-slate-900">{title}</span>
+                </div>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 ease-[cubic-bezier(0.87,0,0.13,1)] group-data-[state=open]:rotate-180" />
+            </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="overflow-hidden data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
+            <div className="pb-6 px-1">
+                {children}
+            </div>
+        </Accordion.Content>
+    </Accordion.Item>
+)
 
-    // Location Search State
+export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClose }) {
+    // Local State to handle high-frequency slider updates before committing to parent
+    const [localPrice, setLocalPrice] = useState(filters.priceRange)
+    const [localLand, setLocalLand] = useState(filters.landRange)
+    const [landUnit, setLandUnit] = useState("cent") // 'cent' | 'acre'
+
+    // Debounce Commits
+    useEffect(() => {
+        const timer = setTimeout(() => setFilters(prev => ({ ...prev, priceRange: localPrice })), 300)
+        return () => clearTimeout(timer)
+    }, [localPrice, setFilters])
+
+    useEffect(() => {
+        const timer = setTimeout(() => setFilters(prev => ({ ...prev, landRange: localLand })), 300)
+        return () => clearTimeout(timer)
+    }, [localLand, setFilters])
+
+    // Location Dropdown State
+    const [isLocOpen, setIsLocOpen] = useState(false)
     const [locSearch, setLocSearch] = useState("")
-    const [isLocDropdownOpen, setIsLocDropdownOpen] = useState(false)
 
     // Handlers
-    const toggleSection = (section) => {
-        setOpenSections(prev => ({ ...prev, [section]: !prev[section] }))
-    }
-
     const handleLocationToggle = (loc) => {
         setFilters(prev => {
             const current = prev.locations || []
-            const updated = current.includes(loc)
-                ? current.filter(l => l !== loc)
-                : [...current, loc]
-            return { ...prev, locations: updated }
+            return {
+                ...prev,
+                locations: current.includes(loc) ? current.filter(l => l !== loc) : [...current, loc]
+            }
         })
     }
 
-    const handleTypeToggle = (type) => {
-        setFilters(prev => ({
-            ...prev,
-            type: prev.type === type ? null : type
-        }))
+    // Variants
+    const containerVariants = {
+        hidden: { x: "100%", opacity: 0 },
+        visible: {
+            x: 0,
+            opacity: 1,
+            transition: {
+                type: "spring",
+                damping: 25,
+                stiffness: 200,
+                staggerChildren: 0.05
+            }
+        },
+        exit: { x: "100%", opacity: 0 }
     }
-
-    const handleAmenityToggle = (amenity) => {
-        setFilters(prev => {
-            const current = prev.amenities || []
-            const updated = current.includes(amenity)
-                ? current.filter(a => a !== amenity)
-                : [...current, amenity]
-            return { ...prev, amenities: updated }
-        })
-    }
-
-    // Price Handler
-    const handlePriceChange = (e, index) => {
-        const newVal = parseInt(e.target.value);
-        const newRange = [...filters.priceRange]; // Use props directly if possible, or local
-        // For simplicity in this non-library setup, we might stick to props update if latency allows, 
-        // OR use local state then commit on mouse up. 
-        // Let's implement a direct update for responsiveness.
-        newRange[index] = newVal;
-        if (index === 0 && newRange[0] > newRange[1]) newRange[0] = newRange[1];
-        if (index === 1 && newRange[1] < newRange[0]) newRange[1] = newRange[0];
-
-        setFilters(prev => ({ ...prev, priceRange: newRange }));
-    }
-
-    // Filtered Locations based on search
-    const visibleLocations = LOCATIONS.filter(l => l.toLowerCase().includes(locSearch.toLowerCase()))
 
     return (
-        <aside className="w-full h-full flex flex-col bg-white border-r border-gray-200">
+        <motion.aside
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={containerVariants}
+            className="w-full md:w-[360px] h-full flex flex-col bg-white/80 backdrop-blur-xl border-l border-white/40 shadow-2xl relative"
+        >
+            {/* NOISE TEXTURE OVERLAY */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
 
-            {/* Header - Professional & Compact */}
-            <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50/50">
-                <div className="flex items-center gap-2">
-                    <Filter className="h-4 w-4 text-secondary" />
-                    <h2 className="text-sm font-bold uppercase tracking-wider text-gray-800">Filters</h2>
+            {/* HEADER */}
+            <div className="flex-none p-6 border-b border-slate-100 flex items-center justify-between relative z-10 bg-white/40">
+                <div>
+                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">Filters</h2>
+                    <p className="text-xs text-slate-500 font-medium">Refine your search</p>
                 </div>
-                {(filters.type || (filters.locations && filters.locations.length > 0) || (filters.amenities && filters.amenities.length > 0)) && (
+                <div className="flex items-center gap-2">
                     <button
-                        onClick={() => setFilters({ type: null, locations: [], amenities: [], priceRange: [40, 500] })}
-                        className="text-xs text-secondary font-bold hover:underline"
+                        onClick={() => setFilters({ type: null, locations: [], priceRange: [10, 1000], landRange: [0, 100], sqftRange: [500, 5000], bhk: null, baths: null })}
+                        className="text-xs font-bold text-slate-400 hover:text-red-500 transition-colors uppercase tracking-wide px-2"
                     >
-                        CLEAR ALL
+                        Reset
                     </button>
-                )}
+                    <button
+                        onClick={onClose}
+                        className="p-2 hover:bg-slate-100 rounded-full transition-all active:scale-95 text-slate-400 hover:text-slate-900"
+                    >
+                        <X className="h-5 w-5" />
+                    </button>
+                </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6">
+            {/* SCROLLABLE CONTENT */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 relative z-10">
+                <Accordion.Root type="multiple" defaultValue={['location', 'price', 'land', 'rooms']} className="space-y-1">
 
-                {/* 1. Location Filter - Searchable Dropdown */}
-                <div className="border-b border-gray-100 pb-6">
-                    <button
-                        onClick={() => toggleSection('location')}
-                        className="w-full flex items-center justify-between mb-4 group"
-                    >
-                        <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">Location</span>
-                        {openSections.location ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-secondary" />}
-                    </button>
-
-                    <AnimatePresence>
-                        {openSections.location && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="overflow-hidden"
+                    {/* 1. LOCATION (Inline Expandable List) */}
+                    <FilterSection value="location" title="Location" icon={MapPin}>
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsLocOpen(!isLocOpen)}
+                                className="w-full flex items-center justify-between bg-white border border-slate-200 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:border-slate-300 transition-all shadow-sm"
                             >
-                                {/* Selected Chips */}
-                                <div className="flex flex-wrap gap-2 mb-3">
+                                <span>{(filters.locations || []).length > 0 ? `${(filters.locations || []).length} Selected` : "Select Locations"}</span>
+                                <ChevronDown className={cn("h-3.5 w-3.5 text-slate-400 transition-transform", isLocOpen && "rotate-180")} />
+                            </button>
+
+                            <AnimatePresence>
+                                {isLocOpen && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="pt-2">
+                                            <div className="relative mb-2">
+                                                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                                                <input
+                                                    autoFocus
+                                                    type="text"
+                                                    placeholder="Search..."
+                                                    value={locSearch}
+                                                    onChange={e => setLocSearch(e.target.value)}
+                                                    className="w-full bg-slate-50 border border-slate-100 rounded-lg py-2 pl-8 pr-3 text-xs font-medium focus:ring-2 focus:ring-red-500/20 outline-none"
+                                                />
+                                            </div>
+                                            <div className="max-h-48 overflow-y-auto custom-scrollbar border border-slate-100 rounded-lg bg-slate-50/50 p-1">
+                                                {LOCATIONS.filter(l => l.toLowerCase().includes(locSearch.toLowerCase())).map(loc => {
+                                                    const isSelected = (filters.locations || []).includes(loc)
+                                                    return (
+                                                        <div
+                                                            key={loc}
+                                                            onClick={() => handleLocationToggle(loc)}
+                                                            className={cn(
+                                                                "flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer text-xs font-medium transition-colors",
+                                                                isSelected ? "bg-white text-red-600 shadow-sm" : "hover:bg-slate-100/50 text-slate-600"
+                                                            )}
+                                                        >
+                                                            {loc}
+                                                            {isSelected && <Check className="h-3 w-3 text-red-500" />}
+                                                        </div>
+                                                    )
+                                                })}
+                                                {LOCATIONS.filter(l => l.toLowerCase().includes(locSearch.toLowerCase())).length === 0 && (
+                                                    <div className="px-4 py-3 text-[10px] text-slate-400 text-center">No locations found</div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            {/* Selected Tags Display */}
+                            {(filters.locations || []).length > 0 && (
+                                <div className="flex flex-wrap gap-1.5 mt-3">
                                     {(filters.locations || []).map(loc => (
-                                        <span key={loc} className="inline-flex items-center gap-1 px-2 py-1 bg-secondary/10 text-secondary text-xs font-semibold rounded-md border border-secondary/20">
+                                        <div key={loc} className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 bg-slate-100 border border-slate-200 rounded-md text-[10px] font-bold text-slate-600">
                                             {loc}
-                                            <X
-                                                className="h-3 w-3 cursor-pointer hover:text-red-600"
-                                                onClick={(e) => { e.stopPropagation(); handleLocationToggle(loc) }}
-                                            />
-                                        </span>
+                                            <button onClick={() => handleLocationToggle(loc)} className="p-0.5 hover:bg-slate-200 rounded-sm text-slate-400 hover:text-slate-700">
+                                                <X className="h-2.5 w-2.5" />
+                                            </button>
+                                        </div>
                                     ))}
                                 </div>
+                            )}
+                        </div>
+                    </FilterSection>
 
-                                {/* Search Input */}
-                                <div className="relative mb-2">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                    <input
-                                        type="text"
-                                        placeholder="Search location..."
-                                        value={locSearch}
-                                        onChange={(e) => {
-                                            setLocSearch(e.target.value)
-                                            setIsLocDropdownOpen(true)
-                                        }}
-                                        onFocus={() => setIsLocDropdownOpen(true)}
-                                        className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition-colors"
-                                    />
-                                    {locSearch && (
-                                        <X
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer hover:text-gray-600"
-                                            onClick={() => setLocSearch("")}
-                                        />
+                    {/* 2. LAND AREA (Histogram + Animated Toggle) */}
+                    <FilterSection value="land" title="Land Area" icon={Filter}>
+                        {/* Toggle */}
+                        <div className="flex justify-center mb-6">
+                            <div className="bg-slate-100 p-1 rounded-xl flex relative">
+                                <motion.div
+                                    className="absolute inset-y-1 bg-white rounded-lg shadow-sm border border-slate-200/50"
+                                    layoutId="landUnitIndicator"
+                                    initial={false}
+                                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                                    style={{
+                                        width: '50%',
+                                        left: landUnit === 'cent' ? '4px' : '50%'
+                                    }}
+                                />
+                                {['cent', 'acre'].map(u => (
+                                    <button
+                                        key={u}
+                                        onClick={() => setLandUnit(u)}
+                                        className={cn(
+                                            "relative z-10 w-20 py-1.5 text-xs font-bold uppercase tracking-wider text-center transition-colors duration-200",
+                                            landUnit === u ? "text-slate-900" : "text-slate-400 hover:text-slate-600"
+                                        )}
+                                    >
+                                        {u}s
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Histogram Visual */}
+                        <div className="h-12 flex items-end gap-[2px] mb-2 px-2 opacity-40 grayscale mask-gradient-b">
+                            {LAND_HISTOGRAM_DATA.map((h, i) => (
+                                <motion.div
+                                    key={i}
+                                    initial={{ height: 0 }}
+                                    animate={{ height: `${h}%` }}
+                                    transition={{ delay: i * 0.02 }}
+                                    className={cn(
+                                        "flex-1 rounded-t-sm transition-colors",
+                                        // Highlight bars within range
+                                        i >= (localLand[0] / 5) && i <= (localLand[1] / 5) ? "bg-red-500" : "bg-slate-300"
                                     )}
-                                </div>
+                                />
+                            ))}
+                        </div>
 
-                                {/* Dropdown List */}
-                                {(isLocDropdownOpen || locSearch.length > 0) && (
-                                    <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-lg mt-1 shadow-sm">
-                                        {visibleLocations.map(loc => {
-                                            const isSelected = (filters.locations || []).includes(loc)
+                        {/* Radix Slider */}
+                        <Slider.Root
+                            className="relative flex items-center select-none touch-none w-full h-5"
+                            value={localLand}
+                            min={0}
+                            max={landUnit === 'acre' ? 1000 : 100} // 10 Acres = 1000 Cents
+                            step={landUnit === 'acre' ? 5 : 1}
+                            onValueChange={setLocalLand}
+                        >
+                            <Slider.Track className="bg-slate-100 relative grow rounded-full h-1.5 overflow-hidden">
+                                <Slider.Range className="absolute bg-gradient-to-r from-red-400 to-red-600 h-full rounded-full" />
+                            </Slider.Track>
+                            {localLand.map((val, i) => (
+                                <Slider.Thumb
+                                    key={i}
+                                    className="block w-5 h-5 bg-white border-2 border-red-500 shadow-[0_4px_10px_rgba(239,68,68,0.2)] rounded-full hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-500/20 transition-all"
+                                >
+                                    {/* Floating Tooltip */}
+                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-bold py-1 px-2 rounded-md whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
+                                        {formatLand(val, landUnit)}
+                                        <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
+                                    </div>
+                                </Slider.Thumb>
+                            ))}
+                        </Slider.Root>
+                        <div className="flex justify-between mt-3 text-xs font-medium text-slate-500">
+                            <span>{formatLand(localLand[0], landUnit)}</span>
+                            <span>{formatLand(localLand[1], landUnit)}</span>
+                        </div>
+                    </FilterSection>
+
+                    {/* 3. BUDGET (Dual Range + Gradient) */}
+
+                    <FilterSection value="price" title="Budget" icon={Sparkles}>
+                        <div className="pt-10 px-2">
+                            <Slider.Root
+                                className="relative flex items-center select-none touch-none w-full h-5 group"
+                                value={localPrice}
+                                min={10}
+                                max={1000}
+                                step={10}
+                                onValueChange={setLocalPrice}
+                            >
+                                <Slider.Track className="bg-slate-100 relative grow rounded-full h-1.5 overflow-hidden">
+                                    <Slider.Range className="absolute bg-gradient-to-r from-slate-400 to-slate-900 h-full rounded-full group-hover:from-red-400 group-hover:to-red-600 transition-all" />
+                                </Slider.Track>
+                                {localPrice.map((val, i) => (
+                                    <Slider.Thumb
+                                        key={i}
+                                        className="block w-6 h-6 bg-white border border-slate-200 shadow-lg rounded-full hover:scale-110 focus:outline-none focus:ring-4 focus:ring-slate-900/10 transition-all flex items-center justify-center"
+                                    >
+                                        <div className="w-1.5 h-1.5 bg-slate-900 rounded-full" />
+                                        {/* Persistent Tooltip */}
+                                        <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-white border border-slate-100 shadow-xl text-slate-900 text-[10px] font-bold py-1 px-2.5 rounded-lg whitespace-nowrap z-20">
+                                            {formatCurrency(val)}
+                                        </div>
+                                    </Slider.Thumb>
+                                ))}
+                            </Slider.Root>
+                        </div>
+                    </FilterSection>
+
+                    {/* 4. ROOMS (Pills with Pop) */}
+                    <FilterSection value="rooms" title="Rooms" icon={Check}>
+                        <div className="space-y-4">
+                            {[
+                                { label: "Bedrooms (BHK)", key: 'bhk' },
+                                { label: "Bathrooms", key: 'baths' }
+                            ].map((row) => (
+                                <div key={row.key}>
+                                    <label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-2 block">{row.label}</label>
+                                    <div className="flex gap-2 p-1 bg-slate-50 rounded-xl">
+                                        {[2, 3, 4, 5, 6].map((num) => {
+                                            const isActive = filters[row.key] === num;
                                             return (
-                                                <div
-                                                    key={loc}
-                                                    onClick={() => handleLocationToggle(loc)}
-                                                    className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                                                <motion.button
+                                                    key={num}
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                    onClick={() => setFilters(p => ({ ...p, [row.key]: isActive ? null : num }))}
+                                                    className={cn(
+                                                        "flex-1 h-9 rounded-lg text-sm font-bold flex items-center justify-center transition-all relative overflow-hidden",
+                                                        isActive
+                                                            ? "text-white shadow-[0_4px_14px_rgba(239,68,68,0.4)]"
+                                                            : "text-slate-400 hover:text-slate-600 hover:bg-white"
+                                                    )}
                                                 >
-                                                    <span className={cn(isSelected ? "text-secondary font-bold" : "text-gray-600")}>
-                                                        {loc}
-                                                    </span>
-                                                    {isSelected && <Check className="h-3 w-3 text-secondary" />}
-                                                </div>
+                                                    {isActive && (
+                                                        <motion.div
+                                                            layoutId={`pill-${row.key}`}
+                                                            className="absolute inset-0 bg-red-500 z-0"
+                                                            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                                                        />
+                                                    )}
+                                                    <span className="relative z-10">{num}{num === 6 && '+'}</span>
+                                                </motion.button>
                                             )
                                         })}
-                                        {visibleLocations.length === 0 && (
-                                            <div className="p-3 text-xs text-gray-400 text-center">No locations found</div>
-                                        )}
                                     </div>
-                                )}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
-
-                {/* 2. Price Range - Scroll Type */}
-                <div className="border-b border-gray-100 pb-6">
-                    <button
-                        onClick={() => toggleSection('price')}
-                        className="w-full flex items-center justify-between mb-4 group"
-                    >
-                        <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">Price Range</span>
-                        {openSections.price ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-secondary" />}
-                    </button>
-
-                    <AnimatePresence>
-                        {openSections.price && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="overflow-hidden px-1"
-                            >
-                                <div className="text-xs font-bold text-gray-700 mb-2 flex justify-between">
-                                    <span>₹{filters.priceRange[0]}L</span>
-                                    <span>₹{filters.priceRange[1]}L</span>
                                 </div>
-                                <div className="relative h-10 flex items-center">
-                                    {/* Slider Track */}
-                                    <div className="absolute w-full h-1 bg-gray-200 rounded-full"></div>
-                                    <div
-                                        className="absolute h-1 bg-secondary rounded-full"
-                                        style={{
-                                            left: `${(filters.priceRange[0] / 500) * 100}%`,
-                                            right: `${100 - (filters.priceRange[1] / 500) * 100}%`
-                                        }}
-                                    ></div>
-
-                                    {/* Native Inputs for Glider Logic */}
-                                    {/* Min Slider */}
-                                    <input
-                                        type="range" min="0" max="500" step="5"
-                                        value={filters.priceRange[0]}
-                                        onChange={(e) => handlePriceChange(e, 0)}
-                                        className="absolute w-full h-full pointer-events-none opacity-0 z-30 range-slider-thumb"
-                                    />
-                                    {/* Max Slider */}
-                                    <input
-                                        type="range" min="0" max="500" step="5"
-                                        value={filters.priceRange[1]}
-                                        onChange={(e) => handlePriceChange(e, 1)}
-                                        className="absolute w-full h-full pointer-events-none opacity-0 z-30 range-slider-thumb"
-                                    />
-
-                                    {/* Visual Thumbs */}
-                                    <div
-                                        className="absolute w-4 h-4 bg-white border-2 border-secondary rounded-full shadow-md z-20 pointer-events-none"
-                                        style={{ left: `${(filters.priceRange[0] / 500) * 100}%`, transform: 'translateX(-50%)' }}
-                                    ></div>
-                                    <div
-                                        className="absolute w-4 h-4 bg-white border-2 border-secondary rounded-full shadow-md z-20 pointer-events-none"
-                                        style={{ left: `${(filters.priceRange[1] / 500) * 100}%`, transform: 'translateX(-50%)' }}
-                                    ></div>
-                                </div>
-                                <p className="text-[10px] text-gray-400 text-center mt-2">Drag sliders to adjust budget</p>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
-
-                {/* 3. Property Type - Checkboxes */}
-                <div className="border-b border-gray-100 pb-6">
-                    <button
-                        onClick={() => toggleSection('type')}
-                        className="w-full flex items-center justify-between mb-4 group"
-                    >
-                        <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">Property Type</span>
-                        {openSections.type ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-secondary" />}
-                    </button>
-
-                    <AnimatePresence>
-                        {openSections.type && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="overflow-hidden space-y-2"
-                            >
-                                {PROPERTY_TYPES.map(type => (
-                                    <label key={type} className="flex items-center gap-3 cursor-pointer group">
-                                        <div className="relative">
-                                            <input
-                                                type="checkbox"
-                                                className="peer sr-only"
-                                                checked={filters.type === type}
-                                                onChange={() => handleTypeToggle(type)}
-                                            />
-                                            <div className="w-4 h-4 border border-gray-300 rounded flex items-center justify-center peer-checked:bg-secondary peer-checked:border-secondary transition-all">
-                                                <Check className="h-3 w-3 text-white opacity-0 peer-checked:opacity-100" />
-                                            </div>
-                                        </div>
-                                        <span className={cn(
-                                            "text-sm group-hover:text-secondary transition-colors",
-                                            filters.type === type ? "font-bold text-gray-900" : "text-gray-600"
-                                        )}>
-                                            {type}
-                                        </span>
-                                    </label>
-                                ))}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
-
-                {/* 4. Amenities - New Section */}
-                <div>
-                    <button
-                        onClick={() => toggleSection('amenities')}
-                        className="w-full flex items-center justify-between mb-4 group"
-                    >
-                        <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">Amenities</span>
-                        {openSections.amenities ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-secondary" />}
-                    </button>
-
-                    <AnimatePresence>
-                        {openSections.amenities && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="overflow-hidden space-y-2"
-                            >
-                                {AMENITIES_LIST.map(amenity => (
-                                    <label key={amenity} className="flex items-center gap-3 cursor-pointer group">
-                                        <div className="relative">
-                                            <input
-                                                type="checkbox"
-                                                className="peer sr-only"
-                                                checked={(filters.amenities || []).includes(amenity)}
-                                                onChange={() => handleAmenityToggle(amenity)}
-                                            />
-                                            <div className="w-4 h-4 border border-gray-300 rounded flex items-center justify-center peer-checked:bg-secondary peer-checked:border-secondary transition-all">
-                                                <Check className="h-3 w-3 text-white opacity-0 peer-checked:opacity-100" />
-                                            </div>
-                                        </div>
-                                        <span className={cn(
-                                            "text-sm transition-colors",
-                                            (filters.amenities || []).includes(amenity) ? "text-gray-900 font-bold" : "text-gray-600 group-hover:text-secondary"
-                                        )}>
-                                            {amenity}
-                                        </span>
-                                    </label>
-                                ))}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
-
+                            ))}
+                        </div>
+                    </FilterSection>
+                </Accordion.Root>
             </div>
 
-            {/* Footer Status */}
-            <div className="p-4 border-t border-gray-200 bg-gray-50/50">
-                <p className="text-xs text-center text-gray-500">
-                    <span className="font-bold text-gray-900">{filteredCount}</span> results found
-                </p>
+            {/* APPLY BUTTON */}
+            <div className="p-5 border-t border-slate-100 bg-white/60 relative z-10">
+                <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    onClick={onClose}
+                    className="w-full bg-slate-900 hover:bg-black text-white py-3.5 rounded-xl text-sm font-bold tracking-wide shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2"
+                >
+                    Show {filteredCount} Properties
+                </motion.button>
             </div>
-        </aside>
+
+        </motion.aside>
     )
 }

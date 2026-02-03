@@ -14,7 +14,7 @@ const testimonials = [
     {
         name: "Dr. Rajesh Kumar",
         role: "Cardiologist, Amala Hospital",
-        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&auto=format&fit=crop", // Updated to Indian male doctor
         quote: "Thrissur Villas made my home buying experience absolutely seamless. Their knowledge of the local luxury market is unmatched. Highly recommended for busy professionals.",
         rating: 5
     },
@@ -38,6 +38,41 @@ const testimonials = [
         image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
         quote: "As an architect, I appreciate their eye for quality. They only list properties that meet high standards of design and construction.",
         rating: 4
+    },
+    {
+        name: "David Verghese",
+        role: "Tech Entrepreneur",
+        image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=200&auto=format&fit=crop",
+        quote: "The smart home features in their villas are world-class. It’s rare to find such modern amenities integrated so well with traditional Kerala aesthetics.",
+        rating: 5
+    },
+    {
+        name: "Lakshmi Nair",
+        role: "Retired Professor",
+        image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=200&auto=format&fit=crop",
+        quote: "We wanted a peaceful retirement home near the city but away from the noise. They found us the perfect gated community in Ayyanthole.",
+        rating: 5
+    },
+    {
+        name: "Col. Suresh Menon",
+        role: "Army Officer (Retd)",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+        quote: "Reviewing documents and verifying titles was my biggest concern. Their legal team is thorough and leaves nothing to chance. Very trustworthy.",
+        rating: 5
+    },
+    {
+        name: "Dr. Priya Joseph",
+        role: "Dentist",
+        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=200&auto=format&fit=crop", // Indian female doctor
+        quote: "The 'Post Free Ad' feature helped me find a tenant for my apartment in just 2 days. The platform attracts serious and genuine enquiries only.",
+        rating: 4
+    },
+    {
+        name: "Krishnan lyer",
+        role: "Chartered Accountant",
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+        quote: "Investment wise, they guided me to up-and-coming areas like Mannuthy which have appreciated significantly. Truly expert advice.",
+        rating: 5
     }
 ]
 

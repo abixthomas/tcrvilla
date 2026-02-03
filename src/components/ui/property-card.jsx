@@ -1,24 +1,27 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Bed, Bath, Expand, Heart, MapPin, ArrowUpRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 export function PropertyCard({ property, index }) {
+    const [imgSrc, setImgSrc] = useState(
+        (property.images && property.images.length > 0 ? property.images[0] : property.image) ||
+        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80"
+    )
+
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: true }}
-            className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 transform hover:-translate-y-3"
+            className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 hover:-translate-y-3 h-full"
         >
             {/* Image Container */}
-            <div className="relative h-64 overflow-hidden">
+            <div className="relative h-64 overflow-hidden bg-gray-200">
                 <img
-                    src={property.image}
+                    src={imgSrc}
                     alt={property.title}
+                    onError={() => setImgSrc("https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80")}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
@@ -33,7 +36,9 @@ export function PropertyCard({ property, index }) {
 
                 {/* Price Tag */}
                 <div className="absolute bottom-4 left-4 text-white">
-                    <span className="text-2xl font-bold">{property.price}</span>
+                    <span className="text-2xl font-bold">
+                        ₹{(property.price / 100000).toFixed(1)}L
+                    </span>
                 </div>
             </div>
 
@@ -55,7 +60,7 @@ export function PropertyCard({ property, index }) {
                 <div className="flex items-center justify-between py-4 border-t border-gray-100 mb-4">
                     <div className="flex items-center gap-2 text-gray-600">
                         <Bed className="h-4 w-4" />
-                        <span className="text-sm font-medium">{property.buds} Beds</span>
+                        <span className="text-sm font-medium">{property.bhk || property.buds} Beds</span>
                     </div>
                     <div className="flex items-center gap-2 text-gray-600">
                         <Bath className="h-4 w-4" />
