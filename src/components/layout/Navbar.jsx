@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Phone, Mail, Globe, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import ThrissurVillasLogo from "@/components/brand/Logo"
 
 const navItems = [
     { name: "Home", href: "/" },
@@ -64,22 +65,8 @@ export function Navbar() {
                     <Link href="/" className="flex flex-col group">
                         <div className="flex items-center gap-3">
                             {/* Image Logo */}
-                            <div className="relative h-14 w-auto md:h-16 transition-all duration-300">
-                                <img
-                                    src="/logo.png"
-                                    alt="Thrissur Villas Logo"
-                                    className="h-full w-auto object-contain"
-                                />
-                            </div>
-
-                            {/* Text Logo - Restored */}
-                            <div>
-                                <h1 className={cn(
-                                    "font-serif font-bold text-xl md:text-2xl leading-none tracking-tight hidden md:block",
-                                    isScrolled ? "text-primary" : "text-white drop-shadow-md"
-                                )}>
-                                    Thrissur Villas
-                                </h1>
+                            <div className="flex items-center space-x-2 pl-1">
+                                <ThrissurVillasLogo variant="header" />
                             </div>
                         </div>
                         {/* Tagline for Mobile/Scrolled state could be hidden or adapted */}

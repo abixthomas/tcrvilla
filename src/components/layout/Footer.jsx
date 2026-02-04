@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import ThrissurVillasLogo from "@/components/brand/Logo"
 
 import { useState, useEffect } from "react"
 
@@ -25,8 +26,10 @@ export function Footer() {
             <div className="container mx-auto px-4 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                     {/* Brand Info */}
-                    <div className="space-y-4">
-                        <h3 className="text-2xl font-serif font-bold text-secondary">Thrissur Villas</h3>
+                    <div className="space-y-4 flex flex-col items-center md:items-start">
+                        <div className="mb-2">
+                            <ThrissurVillasLogo variant="footer" />
+                        </div>
                         <p className="text-gray-300 text-sm leading-relaxed">
                             The #1 premium real estate platform in Thrissur. We connect buyers and sellers with trust, transparency, and technology.
                         </p>

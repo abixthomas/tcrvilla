@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { ArrowRight, Star } from "lucide-react"
 
 const HERO_IMAGES = [
-    "https://images.unsplash.com/photo-1600596542815-2a4d04774c13?q=80&w=2075&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2670&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop"
@@ -30,7 +30,7 @@ export function Hero() {
         <section
             className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-gray-900"
             style={{
-                backgroundImage: 'url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=400&auto=format&fit=crop")',
+                backgroundImage: 'url("https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2670&auto=format&fit=crop")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
             }}
@@ -83,17 +83,15 @@ export function Hero() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, delay: 0.5 }}
-                    className="flex flex-col items-center pt-32 md:pt-40"
+                    className="flex flex-col items-center pt-24 md:pt-32"
                 >
                     {/* Badge Removed */}
 
 
                     {/* Main Heading with Premium Typography */}
-                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-10 leading-relaxed tracking-wider drop-shadow-2xl uppercase max-w-5xl mx-auto">
-                        Experience Luxury <br className="hidden md:block" />
-                        <span className="text-white/90">
-                            Beyond Boundaries
-                        </span>
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-medium text-white mb-6 leading-tight tracking-tight">
+                        Discover Your <br />
+                        <span className="text-primary">Dream Sanctuary</span>
                     </h1>
 
                     {/* Subheading Removed as per request */}

@@ -1,5 +1,5 @@
 
-import { Montserrat, Open_Sans } from "next/font/google";
+import { Montserrat, Open_Sans, Playfair_Display } from "next/font/google";
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
@@ -17,6 +17,12 @@ const serif = Montserrat({
   display: "swap",
 });
 
+const playfair = Playfair_Display({
+  variable: "--font-display", // Mapping directly to the variable used in globals.css
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata = {
   title: "Thrissur Villas | Premium Real Estate",
   description: "The most trusted real estate platform in Thrissur. Buy, sell, and rent luxury properties.",
@@ -29,7 +35,8 @@ export default function RootLayout({ children }) {
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
           sans.variable,
-          serif.variable
+          serif.variable,
+          playfair.variable
         )}
       >
         <Navbar />

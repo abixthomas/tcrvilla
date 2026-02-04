@@ -9,7 +9,7 @@ const containerVariants = {
     show: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1
+            staggerChildren: 0.02
         }
     }
 }
@@ -39,17 +39,14 @@ export function PropertyGrid({ properties }) {
     }
 
     return (
-        <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="show"
+        <div
             className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-20 items-start"
         >
             {properties.map((property) => (
-                <motion.div key={property.id} layout variants={itemVariants} className="w-full">
+                <div key={property.id} className="w-full">
                     <PropertyCard property={property} />
-                </motion.div>
+                </div>
             ))}
-        </motion.div>
+        </div>
     )
 }

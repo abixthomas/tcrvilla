@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 // import { Navbar } from "@/components/layout/Navbar" // Removed duplicate
 import { PropertyFilterPanel } from "@/components/properties/PropertyFilterPanel"
 import { PropertyGrid } from "@/components/properties/PropertyGrid"
@@ -10,16 +11,38 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Filter } from "lucide-react"
 
 export default function PropertiesPage() {
+    const searchParams = useSearchParams()
+
     // Filter State
     const [filters, setFilters] = useState({
         type: null,
         locations: [],
         priceRange: [10, 1000],
         landRange: [0, 100], // Default 0-100 Cents
-        sqftRange: [500, 5000],
+        sqftRange: [0, 20000],
         bhk: null,
         baths: null
     })
+
+    // Deep Linking: Initialize filters from URL
+    useEffect(() => {
+        const type = searchParams.get('type')
+        const location = searchParams.get('location')
+        const minPrice = searchParams.get('minPrice')
+        const maxPrice = searchParams.get('maxPrice')
+
+        if (type || location || minPrice || maxPrice) {
+            setFilters(prev => ({
+                ...prev,
+                type: type || null,
+                locations: location ? [location] : [],
+                priceRange: [
+                    minPrice ? Number(minPrice) : 10,
+                    maxPrice ? Number(maxPrice) : 1000
+                ]
+            }))
+        }
+    }, [searchParams])
 
     // UI State
     const [isFilterOpen, setIsFilterOpen] = useState(true)

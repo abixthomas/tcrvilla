@@ -3,7 +3,7 @@ import { FeaturedProperties } from "@/components/sections/FeaturedProperties";
 import { Services } from "@/components/sections/Services";
 import { NRICorner } from "@/components/sections/NRICorner";
 import { AboutUs } from "@/components/sections/AboutUs";
-import { EMICalculator } from "@/components/sections/EMICalculator";
+
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Awards } from "@/components/sections/Awards";
 import { Contact } from "@/components/sections/Contact";
@@ -20,7 +20,7 @@ export default function Home() {
       <VirtualTourTeaser />
       <NRICorner />
       <Services />
-      <EMICalculator />
+
       <AboutUs />
       <Testimonials />
       <Contact />

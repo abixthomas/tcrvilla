@@ -67,6 +67,15 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
         return () => clearTimeout(timer)
     }, [localLand, setFilters])
 
+    // Sync local state when props change (e.g. on Reset)
+    useEffect(() => {
+        setLocalPrice(filters.priceRange)
+    }, [filters.priceRange])
+
+    useEffect(() => {
+        setLocalLand(filters.landRange)
+    }, [filters.landRange])
+
     // Location Dropdown State
     const [isLocOpen, setIsLocOpen] = useState(false)
     const [locSearch, setLocSearch] = useState("")
@@ -117,7 +126,10 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                 </div>
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => setFilters({ type: null, locations: [], priceRange: [10, 1000], landRange: [0, 100], sqftRange: [500, 5000], bhk: null, baths: null })}
+                        onClick={() => {
+                            setFilters({ type: null, locations: [], priceRange: [10, 1000], landRange: [0, 100], sqftRange: [0, 20000], bhk: null, baths: null })
+                            setLandUnit("cent")
+                        }}
                         className="text-xs font-bold text-slate-400 hover:text-red-500 transition-colors uppercase tracking-wide px-2"
                     >
                         Reset
@@ -294,7 +306,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                                 className="relative flex items-center select-none touch-none w-full h-5 group"
                                 value={localPrice}
                                 min={10}
-                                max={1000}
+                                max={1500}
                                 step={10}
                                 onValueChange={setLocalPrice}
                             >
@@ -321,7 +333,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                     <FilterSection value="rooms" title="Rooms" icon={Check}>
                         <div className="space-y-4">
                             {[
-                                { label: "Bedrooms (BHK)", key: 'bhk' },
+                                { label: "BHK", key: 'bhk' },
                                 { label: "Bathrooms", key: 'baths' }
                             ].map((row) => (
                                 <div key={row.key}>
@@ -372,6 +384,6 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                 </motion.button>
             </div>
 
-        </motion.aside>
+        </motion.aside >
     )
 }

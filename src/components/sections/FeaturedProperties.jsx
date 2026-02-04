@@ -17,7 +17,7 @@ const container = {
 
 export function FeaturedProperties() {
     return (
-        <section id="properties" className="py-32 bg-gray-50/50 relative overflow-hidden scroll-mt-28">
+        <section id="properties" className="pt-10 pb-24 bg-gray-50/50 relative overflow-hidden scroll-mt-28">
             {/* Decor Elements */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
@@ -45,7 +45,7 @@ export function FeaturedProperties() {
                         viewport={{ once: true }}
                     >
                         <Button variant="outline" className="mt-8 md:mt-0 rounded-full px-10 py-6 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-500 border-gray-300">
-                            View All Collection
+                            View All
                         </Button>
                     </motion.div>
                 </div>
