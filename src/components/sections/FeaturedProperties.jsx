@@ -28,14 +28,12 @@ export function FeaturedProperties() {
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
-                        className="max-w-2xl"
                     >
-                        <h4 className="text-secondary font-bold uppercase tracking-[0.2em] text-xs mb-4 flex items-center gap-3">
+                        <h4 className="text-secondary font-interface font-bold uppercase tracking-[0.3em] text-[10px] mb-4 flex items-center gap-3">
                             <span className="w-12 h-[2px] bg-secondary" /> Exclusive Listings
                         </h4>
-                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-primary leading-[1.15] tracking-tight">
-                            Featured Properties <br />
-                            <span className="text-primary">For You</span>
+                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-medium text-primary leading-[1.1] tracking-tight">
+                            Featured Properties <span className="text-gradient-elite">For You</span>
                         </h2>
                     </motion.div>
                     <motion.div

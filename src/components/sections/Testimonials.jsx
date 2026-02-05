@@ -85,9 +85,9 @@ export function Testimonials() {
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h4 className="text-secondary font-bold uppercase tracking-widest text-sm mb-2">Testimonials</h4>
-                    <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6">
-                        Trusted by Hundreds of <br /> Happy Families
+                    <h4 className="text-secondary font-bold uppercase tracking-[0.25em] text-xs mb-3">Testimonials</h4>
+                    <h2 className="text-3xl md:text-5xl font-display font-medium text-white mb-6 leading-tight">
+                        Trusted by Hundreds of <br /> <span className="italic opacity-90">Happy Families</span>
                     </h2>
                 </div>
 

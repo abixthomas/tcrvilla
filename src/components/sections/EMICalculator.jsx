@@ -36,8 +36,8 @@ export function EMICalculator() {
                     {/* Left: Content */}
                     <div className="lg:w-1/2">
                         <h4 className="text-secondary font-bold uppercase tracking-widest text-sm mb-2">Financial Planning</h4>
-                        <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
-                            Smart EMI Calculator
+                        <h2 className="text-3xl md:text-5xl font-display font-medium text-gray-900 mb-6 leading-tight">
+                            Smart <span className="text-gradient-elite">EMI Calculator</span>
                         </h2>
                         <p className="text-gray-500 text-lg mb-8">
                             Plan your finances with our easy-to-use home loan calculator. Get an estimate of your monthly installments instantly.
@@ -143,7 +143,7 @@ export function EMICalculator() {
                             className="bg-primary text-white p-12 rounded-full w-80 h-80 flex flex-col items-center justify-center shadow-2xl relative z-10 border-8 border-white/10"
                         >
                             <div className="text-sm font-medium text-gray-300 uppercase tracking-widest mb-2">Monthly EMI</div>
-                            <div className="text-4xl font-serif font-bold mb-2">{formatCurrency(emi)}</div>
+                            <div className="text-4xl font-display font-bold mb-2 tracking-tight">{formatCurrency(emi)}</div>
                             <div className="text-xs text-gray-400 text-center max-w-[200px]">
                                 *Estimated figure. Actual loan terms may vary bank to bank.
                             </div>

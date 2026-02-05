@@ -24,8 +24,8 @@ export function CallToAction() {
                     transition={{ duration: 0.5 }}
                     viewport={{ once: true }}
                 >
-                    <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6">
-                        Have a Property to Sell?
+                    <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-6 leading-tight tracking-wide">
+                        Have a Property <span className="italic">to Sell?</span>
                     </h2>
                     <p className="text-xl text-gray-200 mb-10 max-w-2xl mx-auto">
                         List your property on Thrissur's most premium real estate platform and connect with serious buyers today.

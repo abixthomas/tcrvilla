@@ -6,8 +6,8 @@
   --color-primary: #1E3A8A;
   --color-primary-foreground: #FFFFFF;
 
-  /* Secondary: Premium Brand Red - From 'Post Free Property Ads' (Action, Impact, Wow Factor) */
-  --color-secondary: #DC2626;
+  /* Secondary: Premium Brand Red - Updated to exact Logo Red */
+  --color-secondary: #ef4444;
   --color-secondary-foreground: #FFFFFF;
 
   --color-tertiary: #10B981;
@@ -30,13 +30,18 @@
   --color-destructive: #EF4444;
   --color-destructive-foreground: #FFFFFF;
 
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-display: var(--font-display), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  /* Typography Stack */
+  --font-sans: var(--font-sans), "Inter", system-ui, sans-serif;
+  --font-interface: var(--font-interface), "Montserrat", sans-serif;
+  --font-display: var(--font-luxury), "Playfair Display", serif;
+  --font-luxury: var(--font-luxury), "Playfair Display", serif;
+  /* Alias for safety */
 
   --radius-lg: 0.5rem;
   --radius-md: 0.375rem;
   --radius-sm: 0.25rem;
+
+  /* Fluid Typography Variables usually handled by utility config, but setting defaults here if needed */
 
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
@@ -155,16 +160,48 @@ img[alt*="Thrissur Villas"] {
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased subpixel-antialiased;
   }
 
+  p {
+    @apply leading-[1.6] md:leading-normal;
+  }
+
+  /* Global Heading Styles - Elite Editorial Look */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply font-serif font-bold text-primary;
+    @apply font-display font-medium text-primary leading-tight tracking-tight;
+    letter-spacing: -0.02em;
+    /* Tighter editorial look */
+    text-wrap: balance;
+    font-feature-settings: "pnum" on, "lnum" on;
+  }
+
+  /* Fluid Typography - Simple Implementations for H1/H2 */
+  h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+  }
+
+  /* UI Text Defaults */
+  .font-interface {
+    font-family: var(--font-interface);
+  }
+
+  /* Exact Gradient Styling for Emphasized H2s */
+  .text-gradient-elite {
+    @apply font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary;
+    /* Increased padding to prevent clip cut-off on italics, especially at line ends */
+    padding-right: 0.2em;
+    padding-bottom: 0.1em;
+    /* Safety for descenders */
   }
 }
 

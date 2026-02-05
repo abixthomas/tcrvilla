@@ -48,7 +48,7 @@ export function Footer() {
 
                     {/* Quick Links */}
                     <div className="space-y-4">
-                        <h4 className="text-lg font-bold">Quick Links</h4>
+                        <h4 className="text-lg font-display font-semibold tracking-wide text-white">Quick Links</h4>
                         <ul className="space-y-2 text-sm text-gray-300">
                             {["About Us", "Our Services", "Featured Properties", "Latest Blog", "Contact Us"].map((link) => (
                                 <li key={link}>
@@ -62,7 +62,7 @@ export function Footer() {
 
                     {/* Services */}
                     <div className="space-y-4">
-                        <h4 className="text-lg font-bold">Services</h4>
+                        <h4 className="text-lg font-display font-semibold tracking-wide text-white">Services</h4>
                         <ul className="space-y-2 text-sm text-gray-300">
                             {["Property Valuation", "Legal Assistance", "Home Loans", "Interior Design", "Vastu Consulting"].map((link) => (
                                 <li key={link}>
@@ -76,7 +76,7 @@ export function Footer() {
 
                     {/* Newsletter */}
                     <div className="space-y-4">
-                        <h4 className="text-lg font-bold">Stay Updated</h4>
+                        <h4 className="text-lg font-display font-semibold tracking-wide text-white">Stay Updated</h4>
                         <p className="text-gray-300 text-sm">Subscribe to our newsletter for the latest property news.</p>
                         <div className="flex gap-2">
                             {/* Mounted check to prevent hydration mismatch from extensions */}

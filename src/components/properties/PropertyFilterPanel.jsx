@@ -37,7 +37,7 @@ const FilterSection = ({ value, title, icon: Icon, children }) => (
                     <div className="p-2 rounded-lg bg-slate-100 group-hover:bg-red-50 text-slate-400 group-hover:text-red-500 transition-colors">
                         <Icon className="h-4 w-4" />
                     </div>
-                    <span className="text-sm font-semibold text-slate-700 tracking-wide group-hover:text-slate-900">{title}</span>
+                    <span className="font-interface text-xs font-semibold text-slate-700 uppercase tracking-widest group-hover:text-slate-900">{title}</span>
                 </div>
                 <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 ease-[cubic-bezier(0.87,0,0.13,1)] group-data-[state=open]:rotate-180" />
             </Accordion.Trigger>
@@ -121,8 +121,8 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
             {/* HEADER */}
             <div className="flex-none p-6 border-b border-slate-100 flex items-center justify-between relative z-10 bg-white/40">
                 <div>
-                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">Filters</h2>
-                    <p className="text-xs text-slate-500 font-medium">Refine your search</p>
+                    <h2 className="text-xl font-display font-medium text-slate-900 tracking-tight">Filters</h2>
+                    <p className="font-interface text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-1">Refine your search</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <button
@@ -130,7 +130,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                             setFilters({ type: null, locations: [], priceRange: [10, 1000], landRange: [0, 100], sqftRange: [0, 20000], bhk: null, baths: null })
                             setLandUnit("cent")
                         }}
-                        className="text-xs font-bold text-slate-400 hover:text-red-500 transition-colors uppercase tracking-wide px-2"
+                        className="font-interface text-[10px] font-bold text-slate-400 hover:text-secondary transition-colors uppercase tracking-widest px-2"
                     >
                         Reset
                     </button>
@@ -285,7 +285,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                                     className="block w-5 h-5 bg-white border-2 border-red-500 shadow-[0_4px_10px_rgba(239,68,68,0.2)] rounded-full hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-500/20 transition-all"
                                 >
                                     {/* Floating Tooltip */}
-                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-bold py-1 px-2 rounded-md whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
+                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white font-sans text-[10px] font-medium py-1 px-2 rounded-md whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity pointer-events-none tracking-tight">
                                         {formatLand(val, landUnit)}
                                         <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
                                     </div>
@@ -320,7 +320,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                                     >
                                         <div className="w-1.5 h-1.5 bg-slate-900 rounded-full" />
                                         {/* Persistent Tooltip */}
-                                        <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-white border border-slate-100 shadow-xl text-slate-900 text-[10px] font-bold py-1 px-2.5 rounded-lg whitespace-nowrap z-20">
+                                        <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-white border border-slate-100 shadow-xl text-slate-900 font-sans text-[10px] font-medium py-1 px-2.5 rounded-lg whitespace-nowrap z-20 tracking-tight">
                                             {formatCurrency(val)}
                                         </div>
                                     </Slider.Thumb>
@@ -337,7 +337,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                                 { label: "Bathrooms", key: 'baths' }
                             ].map((row) => (
                                 <div key={row.key}>
-                                    <label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-2 block">{row.label}</label>
+                                    <label className="font-interface text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2 block">{row.label}</label>
                                     <div className="flex gap-2 p-1 bg-slate-50 rounded-xl">
                                         {[2, 3, 4, 5, 6].map((num) => {
                                             const isActive = filters[row.key] === num;
@@ -378,7 +378,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                 <motion.button
                     whileTap={{ scale: 0.98 }}
                     onClick={onClose}
-                    className="w-full bg-slate-900 hover:bg-black text-white py-3.5 rounded-xl text-sm font-bold tracking-wide shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2"
+                    className="w-full bg-slate-900 hover:bg-black text-white py-3.5 rounded-xl font-interface text-xs font-bold uppercase tracking-widest shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2"
                 >
                     Show {filteredCount} Properties
                 </motion.button>

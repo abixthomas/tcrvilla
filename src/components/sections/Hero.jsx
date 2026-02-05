@@ -80,18 +80,21 @@ export function Hero() {
             {/* Content Container */}
             <div className="relative z-10 container mx-auto px-4 text-center">
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 0.5 }}
+                    transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
                     className="flex flex-col items-center pt-24 md:pt-32"
                 >
                     {/* Badge Removed */}
 
 
                     {/* Main Heading with Premium Typography */}
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-medium text-white mb-6 leading-tight tracking-tight">
+                    <h1
+                        className="text-5xl md:text-7xl lg:text-8xl font-display font-medium text-white mb-6 leading-[1.1] tracking-tight text-balance"
+                        style={{ textShadow: "0 1px 2px rgba(0,0,0,0.1)" }}
+                    >
                         Discover Your <br />
-                        <span className="text-primary">Dream Sanctuary</span>
+                        <span className="text-white italic font-normal">Dream Sanctuary</span>
                     </h1>
 
                     {/* Subheading Removed as per request */}
@@ -111,7 +114,7 @@ export function Hero() {
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1.5, duration: 0.8 }}
-                        className="mt-16 hidden md:grid grid-cols-3 divide-x divide-white/20 bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl px-8 py-6 w-full max-w-3xl"
+                        className="mt-16 hidden md:grid grid-cols-3 divide-x divide-white/10 bg-black/20 backdrop-blur-md border border-white/10 rounded-full px-8 py-6 w-full max-w-3xl shadow-2xl"
                     >
                         {[
                             { label: "Active Listings", value: "500+" },
@@ -119,7 +122,7 @@ export function Hero() {
                             { label: "Happy Families", value: "1.2k+" },
                         ].map((stat, i) => (
                             <div key={i} className="px-8 text-center group hover:bg-white/5 transition-colors rounded-lg py-2">
-                                <div className="text-4xl font-serif font-bold text-white mb-1 group-hover:text-secondary transition-colors">
+                                <div className="text-4xl font-display font-medium text-white mb-1 group-hover:text-secondary transition-colors">
                                     {stat.value}
                                 </div>
                                 <div className="text-[10px] font-medium text-gray-400 uppercase tracking-widest">

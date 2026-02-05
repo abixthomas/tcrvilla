@@ -151,9 +151,9 @@ export default function PropertiesPage() {
                             <motion.h1
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-2"
+                                className="text-4xl md:text-5xl font-display font-medium text-gray-900 mb-2 tracking-tight"
                             >
-                                Luxury <span className="text-secondary">Collection</span>
+                                Luxury <span className="text-secondary italic">Collection</span>
                             </motion.h1>
                             <p className="text-gray-500 max-w-xl text-sm md:text-base">
                                 Explore Thrissur's finest real estate.

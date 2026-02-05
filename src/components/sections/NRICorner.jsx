@@ -26,11 +26,8 @@ export function NRICorner() {
                                 <span className="text-xs font-bold uppercase tracking-widest text-primary">Global Kerala Community</span>
                             </div>
 
-                            <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-6 leading-tight">
-                                Manage Your Assets for <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-                                    Peace of Mind Abroad
-                                </span>
+                            <h2 className="text-4xl lg:text-5xl font-display font-medium text-gray-900 mb-6 leading-tight">
+                                Manage Your Assets for <span className="text-gradient-elite">Peace of Mind Abroad</span>
                             </h2>
 
                             <p className="text-gray-600 text-lg mb-8 leading-relaxed max-w-2xl">

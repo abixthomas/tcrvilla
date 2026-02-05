@@ -19,8 +19,8 @@ export function Contact() {
             <div className="container mx-auto px-4">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h4 className="text-secondary font-bold uppercase tracking-widest text-sm mb-2">Get In Touch</h4>
-                    <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
-                        Contact Our Real Estate Experts
+                    <h2 className="text-3xl md:text-5xl font-display font-medium text-gray-900 mb-6 leading-tight">
+                        Contact Our <span className="text-gradient-elite">Real Estate Experts</span>
                     </h2>
                     <p className="text-gray-500 text-lg">
                         Have a question about a property? Want to list your home? We're here to help you every step of the way.
@@ -31,7 +31,7 @@ export function Contact() {
 
                     {/* Contact Form */}
                     <div className="p-8 md:p-12">
-                        <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">Send us a Message</h3>
+                        <h3 className="text-2xl font-display font-semibold text-gray-900 mb-6">Send us a Message</h3>
                         <form className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">

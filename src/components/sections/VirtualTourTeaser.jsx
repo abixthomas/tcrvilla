@@ -28,9 +28,9 @@ export function VirtualTourTeaser() {
                         <span className="uppercase tracking-[0.2em] text-sm font-bold">Immersive Experience</span>
                     </div>
 
-                    <h2 className="text-4xl md:text-7xl font-serif font-bold text-white mb-8 leading-tight">
+                    <h2 className="text-4xl md:text-7xl font-display font-medium text-white mb-8 leading-[1.1]">
                         Walk Through Your <br />
-                        Dream Home
+                        <span className="italic font-normal">Dream Home</span>
                     </h2>
 
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-12 font-light">

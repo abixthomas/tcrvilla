@@ -36,7 +36,7 @@ export function PropertyCard({ property, index }) {
 
                 {/* Price Tag */}
                 <div className="absolute bottom-4 left-4 text-white">
-                    <span className="text-2xl font-bold">
+                    <span className="text-2xl font-bold font-display tracking-tight text-white drop-shadow-md">
                         ₹{(property.price / 100000).toFixed(1)}L
                     </span>
                 </div>
@@ -46,7 +46,7 @@ export function PropertyCard({ property, index }) {
             <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                     <div>
-                        <h3 className="text-xl font-serif font-bold text-gray-800 mb-1 group-hover:text-primary transition-colors">
+                        <h3 className="text-xl font-display font-semibold text-gray-900 mb-1 group-hover:text-primary transition-colors tracking-tight">
                             {property.title}
                         </h3>
                         <div className="flex items-center text-gray-500 text-sm">

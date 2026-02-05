@@ -32,7 +32,7 @@ export function PropertyGrid({ properties }) {
         return (
             <div className="h-full flex flex-col items-center justify-center text-gray-400 py-20">
                 <div className="text-6xl mb-4">🏠</div>
-                <h3 className="text-2xl font-serif font-bold text-gray-900">No Properties Found</h3>
+                <h3 className="text-2xl font-display font-medium text-gray-900">No Properties Found</h3>
                 <p>Try adjusting your filters to see more results.</p>
             </div>
         )

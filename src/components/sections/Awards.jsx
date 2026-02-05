@@ -19,7 +19,7 @@ export function Awards() {
                     style={{ animationDuration: "60s" }}
                 >
                     {partners.concat(partners).map((partner, i) => (
-                        <div key={i} className="flex items-center gap-4 text-white/40 font-bold text-3xl font-serif hover:text-white transition-colors cursor-default">
+                        <div key={i} className="flex items-center gap-4 text-white/40 font-bold text-3xl font-display hover:text-white transition-colors cursor-default">
                             <Award className="h-8 w-8 opacity-50" />
                             {partner}
                         </div>
@@ -31,7 +31,7 @@ export function Awards() {
                     style={{ animationDuration: "60s" }}
                 >
                     {partners.concat(partners).map((partner, i) => (
-                        <div key={i} className="flex items-center gap-4 text-white/40 font-bold text-3xl font-serif hover:text-white transition-colors cursor-default">
+                        <div key={i} className="flex items-center gap-4 text-white/40 font-bold text-3xl font-display hover:text-white transition-colors cursor-default">
                             <Award className="h-8 w-8 opacity-50" />
                             {partner}
                         </div>
