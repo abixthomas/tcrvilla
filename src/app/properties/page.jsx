@@ -10,6 +10,10 @@ import { propertiesData } from "@/data/properties"
 import { motion, AnimatePresence } from "framer-motion"
 import { Filter } from "lucide-react"
 
+
+
+import { PropertiesHero } from "@/components/sections/PropertiesHero"
+
 export default function PropertiesPage() {
     const searchParams = useSearchParams()
 
@@ -94,8 +98,9 @@ export default function PropertiesPage() {
 
     return (
         <div className="bg-gray-50 min-h-screen font-sans">
+            <PropertiesHero />
 
-            {/* Main Content - Starts below Navbar (handled by layout) */}
+            {/* Main Content - Starts below Hero */}
             <main className="min-h-screen flex relative">
 
                 {/* 
@@ -143,25 +148,12 @@ export default function PropertiesPage() {
                     RIGHT PANEL: PROPERTY STREAM 
                     Scrollable Area
                 */}
-                <section className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto min-h-[calc(100vh-6rem)]">
+                <section className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto min-h-[calc(100vh-6rem)] relative z-10">
 
-                    {/* Header for Right Panel */}
-                    <div className="mb-8 flex flex-col md:flex-row justify-between items-end gap-4">
-                        <div>
-                            <motion.h1
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="text-4xl md:text-5xl font-display font-medium text-gray-900 mb-2 tracking-tight"
-                            >
-                                Luxury <span className="text-secondary italic">Collection</span>
-                            </motion.h1>
-                            <p className="text-gray-500 max-w-xl text-sm md:text-base">
-                                Explore Thrissur's finest real estate.
-                            </p>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            {/* Old Filter Button Removed - Replaced by Holographic Tab below */}
+                    {/* Filter Status / Mobile Controls potentially go here if needed */}
+                    <div className="mb-6 flex justify-between items-center">
+                        <div className="text-sm text-gray-500">
+                            Showing <span className="font-bold text-gray-900">{filteredProperties.length}</span> Properties
                         </div>
                     </div>
 

@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
@@ -32,12 +33,16 @@ export function CallToAction() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button variant="secondary" size="lg" className="text-lg px-8 h-14 rounded-full shadow-xl shadow-secondary/20 hover:scale-105 transition-transform">
-                            <PlusCircle className="mr-2 h-5 w-5" /> Post Free Ad
-                        </Button>
-                        <Button variant="outline" size="lg" className="text-lg px-8 h-14 rounded-full bg-transparent text-white border-white hover:bg-white hover:text-primary transition-all">
-                            Talk to an Agent
-                        </Button>
+                        <Link href="/#contact">
+                            <Button variant="secondary" size="lg" className="text-lg px-8 h-14 rounded-full shadow-xl shadow-secondary/20 hover:scale-105 transition-transform">
+                                <PlusCircle className="mr-2 h-5 w-5" /> Post Free Ad
+                            </Button>
+                        </Link>
+                        <Link href="/#contact">
+                            <Button variant="outline" size="lg" className="text-lg px-8 h-14 rounded-full bg-transparent text-white border-white hover:bg-white hover:text-primary transition-all">
+                                Talk to an Agent
+                            </Button>
+                        </Link>
                     </div>
 
                     <p className="mt-6 text-sm text-gray-400">

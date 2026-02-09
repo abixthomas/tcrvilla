@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import { Bed, Bath, Expand, Heart, MapPin, ArrowUpRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -74,12 +75,16 @@ export function PropertyCard({ property, index }) {
 
                 {/* Actions */}
                 <div className="flex gap-2">
-                    <Button className="w-full gap-2 group-hover:bg-primary group-hover:text-white transition-colors" variant="outline">
-                        View Details <ArrowUpRight className="h-4 w-4" />
-                    </Button>
-                    <Button className="flex-1 bg-secondary hover:bg-secondary/90 text-white">
-                        Call
-                    </Button>
+                    <Link href="/properties" className="w-full">
+                        <Button className="w-full gap-2 group-hover:bg-primary group-hover:text-white transition-colors" variant="outline">
+                            View Details <ArrowUpRight className="h-4 w-4" />
+                        </Button>
+                    </Link>
+                    <a href="tel:+919846123456" className="flex-1">
+                        <Button className="w-full bg-secondary hover:bg-secondary/90 text-white">
+                            Call
+                        </Button>
+                    </a>
                 </div>
             </div>
         </motion.div>

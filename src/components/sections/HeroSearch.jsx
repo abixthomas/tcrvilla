@@ -26,7 +26,7 @@ const PRICE_RANGES = [
     { label: "₹3Cr+", val: [300, 1000] },
 ]
 
-export function HeroSearch() {
+export function HeroSearch({ variant = "default" }) {
     const router = useRouter()
 
     // State
@@ -57,33 +57,71 @@ export function HeroSearch() {
         }
     }
 
-    // Close on click outside (simple implementation)
-    // In production, use useOnClickOutside hook
+    // Variant Logic
+    const isGlass = variant === "glass"
+    const isGlassLight = variant === "glass-light"
+
+    // Base styles for container
+    const containerStyles = cn(
+        "rounded-2xl p-3 md:p-4 shadow-2xl flex flex-col md:flex-row items-center gap-2 animate-in fade-in zoom-in duration-500 border transition-all",
+        isGlass && "bg-white/10 backdrop-blur-2xl border-white/20 shadow-black/20",
+        isGlassLight && "bg-white/60 backdrop-blur-3xl border-white/40 shadow-xl shadow-black/5",
+        (!isGlass && !isGlassLight) && "bg-white border-white/20"
+    )
+
+    // Helper for Text Colors
+    const getTextColor = (base, glass, glassLight) => {
+        if (isGlassLight) return glassLight
+        if (isGlass) return glass
+        return base
+    }
 
     return (
         <div className="w-full max-w-4xl mx-auto relative z-50">
 
             {/* Main Search Bar */}
-            <div className="bg-white rounded-2xl p-3 md:p-4 shadow-2xl flex flex-col md:flex-row items-center gap-2 animate-in fade-in zoom-in duration-500 border border-white/20">
+            <div className={containerStyles}>
 
                 {/* 1. LOCATION */}
                 <div className="flex-1 w-full relative">
                     <button
                         onClick={() => toggleDropdown('location')}
-                        className="w-full flex items-center justify-between hover:bg-gray-50 p-2 md:p-3 rounded-xl transition-all group text-left"
+                        className={cn(
+                            "w-full flex items-center justify-between p-2 md:p-3 rounded-xl transition-all group text-left",
+                            isGlass ? "hover:bg-white/10 text-white" : "",
+                            isGlassLight ? "hover:bg-white/50 text-gray-900" : "",
+                            (!isGlass && !isGlassLight) ? "hover:bg-gray-50 text-gray-800" : ""
+                        )}
                     >
                         <div className="flex items-center gap-3">
-                            <div className={`p-2.5 rounded-full transition-colors ${openDropdown === 'location' ? 'bg-secondary text-white' : 'bg-blue-50 text-secondary'}`}>
+                            <div className={cn(
+                                "p-2.5 rounded-full transition-colors",
+                                openDropdown === 'location'
+                                    ? "bg-secondary text-white"
+                                    : isGlass ? "bg-white/20 text-white"
+                                        : isGlassLight ? "bg-white text-secondary shadow-sm"
+                                            : "bg-blue-50 text-secondary"
+                            )}>
                                 <MapPin className="h-5 w-5" />
                             </div>
                             <div>
-                                <div className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Location</div>
-                                <div className="font-bold text-gray-800 text-sm md:text-base truncate max-w-[120px] md:max-w-[150px]">
+                                <div className={cn(
+                                    "text-[10px] md:text-xs font-bold uppercase tracking-wider mb-0.5",
+                                    getTextColor("text-gray-400", "text-white/60", "text-gray-500")
+                                )}>Location</div>
+                                <div className={cn(
+                                    "font-bold text-sm md:text-base truncate max-w-[120px] md:max-w-[150px]",
+                                    getTextColor("text-gray-800", "text-white", "text-gray-900")
+                                )}>
                                     {location || "Select Location"}
                                 </div>
                             </div>
                         </div>
-                        <ChevronDown className={cn("h-4 w-4 text-gray-400 transition-transform", openDropdown === 'location' && "rotate-180 text-secondary")} />
+                        <ChevronDown className={cn(
+                            "h-4 w-4 transition-transform",
+                            getTextColor("text-gray-400", "text-white/50", "text-gray-400"),
+                            openDropdown === 'location' && "rotate-180 text-secondary"
+                        )} />
                     </button>
 
                     {/* Dropdown */}
@@ -97,7 +135,7 @@ export function HeroSearch() {
                                     placeholder="Type to search..."
                                     value={locSearch}
                                     onChange={(e) => setLocSearch(e.target.value)}
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 pl-8 pr-3 text-xs font-medium focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all placeholder:text-gray-400"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 pl-8 pr-3 text-xs font-medium focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all placeholder:text-gray-400 text-gray-800"
                                     onClick={(e) => e.stopPropagation()}
                                 />
                             </div>
@@ -116,26 +154,48 @@ export function HeroSearch() {
                 </div>
 
                 {/* Divider (Desktop) */}
-                <div className="hidden md:block w-px h-10 bg-gray-100" />
+                <div className={cn("hidden md:block w-px h-10", isGlass ? "bg-white/20" : isGlassLight ? "bg-gray-400/20" : "bg-gray-100")} />
 
                 {/* 2. PROPERTY TYPE */}
                 <div className="flex-1 w-full relative">
                     <button
                         onClick={() => toggleDropdown('type')}
-                        className="w-full flex items-center justify-between hover:bg-gray-50 p-2 md:p-3 rounded-xl transition-all group text-left"
+                        className={cn(
+                            "w-full flex items-center justify-between p-2 md:p-3 rounded-xl transition-all group text-left",
+                            isGlass ? "hover:bg-white/10 text-white" : "",
+                            isGlassLight ? "hover:bg-white/50 text-gray-900" : "",
+                            (!isGlass && !isGlassLight) ? "hover:bg-gray-50 text-gray-800" : ""
+                        )}
                     >
                         <div className="flex items-center gap-3">
-                            <div className={`p-2.5 rounded-full transition-colors ${openDropdown === 'type' ? 'bg-secondary text-white' : 'bg-blue-50 text-secondary'}`}>
+                            <div className={cn(
+                                "p-2.5 rounded-full transition-colors",
+                                openDropdown === 'type'
+                                    ? "bg-secondary text-white"
+                                    : isGlass ? "bg-white/20 text-white"
+                                        : isGlassLight ? "bg-white text-secondary shadow-sm"
+                                            : "bg-blue-50 text-secondary"
+                            )}>
                                 <Home className="h-5 w-5" />
                             </div>
                             <div>
-                                <div className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Property Type</div>
-                                <div className="font-bold text-gray-800 text-sm md:text-base">
+                                <div className={cn(
+                                    "text-[10px] md:text-xs font-bold uppercase tracking-wider mb-0.5",
+                                    getTextColor("text-gray-400", "text-white/60", "text-gray-500")
+                                )}>Property Type</div>
+                                <div className={cn(
+                                    "font-bold text-sm md:text-base",
+                                    getTextColor("text-gray-800", "text-white", "text-gray-900")
+                                )}>
                                     {propertyType || "All Types"}
                                 </div>
                             </div>
                         </div>
-                        <ChevronDown className={cn("h-4 w-4 text-gray-400 transition-transform", openDropdown === 'type' && "rotate-180 text-secondary")} />
+                        <ChevronDown className={cn(
+                            "h-4 w-4 transition-transform",
+                            getTextColor("text-gray-400", "text-white/50", "text-gray-400"),
+                            openDropdown === 'type' && "rotate-180 text-secondary"
+                        )} />
                     </button>
 
                     <DropdownContent isOpen={openDropdown === 'type'}>
@@ -153,26 +213,48 @@ export function HeroSearch() {
                 </div>
 
                 {/* Divider (Desktop) */}
-                <div className="hidden md:block w-px h-10 bg-gray-100" />
+                <div className={cn("hidden md:block w-px h-10", isGlass ? "bg-white/20" : isGlassLight ? "bg-gray-400/20" : "bg-gray-100")} />
 
                 {/* 3. PRICE RANGE */}
                 <div className="flex-1 w-full relative">
                     <button
                         onClick={() => toggleDropdown('price')}
-                        className="w-full flex items-center justify-between hover:bg-gray-50 p-2 md:p-3 rounded-xl transition-all group text-left"
+                        className={cn(
+                            "w-full flex items-center justify-between p-2 md:p-3 rounded-xl transition-all group text-left",
+                            isGlass ? "hover:bg-white/10 text-white" : "",
+                            isGlassLight ? "hover:bg-white/50 text-gray-900" : "",
+                            (!isGlass && !isGlassLight) ? "hover:bg-gray-50 text-gray-800" : ""
+                        )}
                     >
                         <div className="flex items-center gap-3">
-                            <div className={`p-2.5 rounded-full transition-colors ${openDropdown === 'price' ? 'bg-secondary text-white' : 'bg-blue-50 text-secondary'}`}>
+                            <div className={cn(
+                                "p-2.5 rounded-full transition-colors",
+                                openDropdown === 'price'
+                                    ? "bg-secondary text-white"
+                                    : isGlass ? "bg-white/20 text-white"
+                                        : isGlassLight ? "bg-white text-secondary shadow-sm"
+                                            : "bg-blue-50 text-secondary"
+                            )}>
                                 <DollarSign className="h-5 w-5" />
                             </div>
                             <div>
-                                <div className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Budget</div>
-                                <div className="font-bold text-gray-800 text-sm md:text-base">
+                                <div className={cn(
+                                    "text-[10px] md:text-xs font-bold uppercase tracking-wider mb-0.5",
+                                    getTextColor("text-gray-400", "text-white/60", "text-gray-500")
+                                )}>Budget</div>
+                                <div className={cn(
+                                    "font-bold text-sm md:text-base",
+                                    getTextColor("text-gray-800", "text-white", "text-gray-900")
+                                )}>
                                     {priceRange.label}
                                 </div>
                             </div>
                         </div>
-                        <ChevronDown className={cn("h-4 w-4 text-gray-400 transition-transform", openDropdown === 'price' && "rotate-180 text-secondary")} />
+                        <ChevronDown className={cn(
+                            "h-4 w-4 transition-transform",
+                            getTextColor("text-gray-400", "text-white/50", "text-gray-400"),
+                            openDropdown === 'price' && "rotate-180 text-secondary"
+                        )} />
                     </button>
 
                     <DropdownContent isOpen={openDropdown === 'price'}>

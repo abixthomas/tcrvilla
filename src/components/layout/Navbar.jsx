@@ -12,10 +12,10 @@ import ThrissurVillasLogo from "@/components/brand/Logo"
 const navItems = [
     { name: "Home", href: "/" },
     { name: "Properties", href: "/properties" },
-    { name: "Services", href: "#services" },
-    { name: "NRI Corner", href: "#nri-corner" },
-    { name: "About", href: "#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "Services", href: "/#services" },
+    { name: "NRI Corner", href: "/#nri-corner" },
+    { name: "About", href: "/#about" },
+    { name: "Contact", href: "/#contact" },
 ]
 
 export function Navbar() {
@@ -31,6 +31,29 @@ export function Navbar() {
         window.addEventListener("scroll", handleScroll)
         return () => window.removeEventListener("scroll", handleScroll)
     }, [])
+
+    const [hash, setHash] = React.useState("")
+
+    React.useEffect(() => {
+        setHash(window.location.hash)
+    }, [pathname])
+
+    const isActive = (item) => {
+        // If it's a hash link, it must match the current hash exactly
+        // And we must be on the home page (since all hash links are on home)
+        if (item.href.includes("#")) {
+            return pathname === "/" && item.href === `/${hash}`
+        }
+
+        // If it's a normal page link (e.g. /, /properties)
+        // For Home (/), it should only be active if there is NO hash
+        if (item.href === "/") {
+            return pathname === "/" && !hash
+        }
+
+        // For other pages (/properties), simple pathname match is enough
+        return pathname === item.href
+    }
 
     return (
         <>
@@ -62,7 +85,7 @@ export function Navbar() {
             >
                 <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
                     {/* Logo Area */}
-                    <Link href="/" className="flex flex-col group">
+                    <Link href="/" className="flex flex-col group" onClick={() => setHash("")}>
                         <div className="flex items-center gap-3">
                             {/* Image Logo */}
                             <div className="flex items-center space-x-2 pl-1">
@@ -78,9 +101,16 @@ export function Navbar() {
                             <Link
                                 key={item.href}
                                 href={item.href}
+                                onClick={() => {
+                                    if (item.href.includes("#")) {
+                                        setHash(item.href.substring(item.href.indexOf("#")))
+                                    } else {
+                                        setHash("")
+                                    }
+                                }}
                                 className={cn(
                                     "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group overflow-hidden",
-                                    pathname === item.href
+                                    isActive(item)
                                         ? "text-white bg-primary shadow-md"
                                         : isScrolled
                                             ? "text-gray-600 hover:text-primary hover:bg-gray-100"
@@ -132,11 +162,21 @@ export function Navbar() {
                                     <Link
                                         key={item.href}
                                         href={item.href}
-                                        className="text-lg font-medium text-gray-800 py-2 border-b border-gray-100 last:border-none flex justify-between items-center"
-                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className={cn(
+                                            "text-lg font-medium py-2 border-b border-gray-100 last:border-none flex justify-between items-center transition-colors",
+                                            isActive(item) ? "text-primary font-bold" : "text-gray-800"
+                                        )}
+                                        onClick={() => {
+                                            if (item.href.includes("#")) {
+                                                setHash(item.href.substring(item.href.indexOf("#")))
+                                            } else {
+                                                setHash("")
+                                            }
+                                            setIsMobileMenuOpen(false)
+                                        }}
                                     >
                                         {item.name}
-                                        <ChevronDown className="h-4 w-4 -rotate-90 text-gray-400" />
+                                        <ChevronDown className={cn("h-4 w-4 -rotate-90", isActive(item) ? "text-primary" : "text-gray-400")} />
                                     </Link>
                                 ))}
                                 <Button className="w-full mt-4 bg-primary text-white">

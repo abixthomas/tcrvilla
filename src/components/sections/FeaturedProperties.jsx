@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { PropertyCard } from "@/components/ui/property-card"
 import { propertiesData } from "@/data/properties"
 import { Button } from "@/components/ui/button"
@@ -42,9 +43,11 @@ export function FeaturedProperties() {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <Button variant="outline" className="mt-8 md:mt-0 rounded-full px-10 py-6 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-500 border-gray-300">
-                            View All
-                        </Button>
+                        <Link href="/properties">
+                            <Button variant="outline" className="mt-8 md:mt-0 rounded-full px-10 py-6 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-500 border-gray-300">
+                                View All
+                            </Button>
+                        </Link>
                     </motion.div>
                 </div>
 
