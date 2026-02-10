@@ -57,7 +57,14 @@ function ContactCard({ icon: Icon, title, info, subInfo, action, gradient, delay
     );
 }
 
+
 export function Contact() {
+    const [isClient, setIsClient] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsClient(true);
+    }, []);
+
     return (
         <section id="contact" className="relative py-24 bg-white overflow-hidden scroll-mt-20">
             {/* Dynamic Background */}
@@ -237,57 +244,61 @@ export function Contact() {
                             </div>
 
                             <form className="space-y-5" suppressHydrationWarning={true}>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <motion.div variants={itemVariants}>
-                                        <div className="space-y-1.5" suppressHydrationWarning={true}>
-                                            <label className="text-xs font-semibold text-gray-600 ml-1">First Name</label>
-                                            <input
-                                                type="text"
-                                                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all duration-300 text-sm font-medium hover:bg-gray-50/80"
-                                                placeholder="John"
-                                            />
+                                {isClient && (
+                                    <>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                            <motion.div variants={itemVariants}>
+                                                <div className="space-y-1.5">
+                                                    <label className="text-xs font-semibold text-gray-600 ml-1">First Name</label>
+                                                    <input
+                                                        type="text"
+                                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all duration-300 text-sm font-medium hover:bg-gray-50/80"
+                                                        placeholder="John"
+                                                    />
+                                                </div>
+                                            </motion.div>
+                                            <motion.div variants={itemVariants}>
+                                                <div className="space-y-1.5">
+                                                    <label className="text-xs font-semibold text-gray-600 ml-1">Last Name</label>
+                                                    <input
+                                                        type="text"
+                                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all duration-300 text-sm font-medium hover:bg-gray-50/80"
+                                                        placeholder="Doe"
+                                                    />
+                                                </div>
+                                            </motion.div>
                                         </div>
-                                    </motion.div>
-                                    <motion.div variants={itemVariants}>
-                                        <div className="space-y-1.5" suppressHydrationWarning={true}>
-                                            <label className="text-xs font-semibold text-gray-600 ml-1">Last Name</label>
-                                            <input
-                                                type="text"
-                                                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all duration-300 text-sm font-medium hover:bg-gray-50/80"
-                                                placeholder="Doe"
-                                            />
-                                        </div>
-                                    </motion.div>
-                                </div>
 
-                                <motion.div variants={itemVariants}>
-                                    <div className="space-y-1.5" suppressHydrationWarning={true}>
-                                        <label className="text-xs font-semibold text-gray-600 ml-1">Email Address</label>
-                                        <input
-                                            type="email"
-                                            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all duration-300 text-sm font-medium hover:bg-gray-50/80"
-                                            placeholder="john@example.com"
-                                        />
-                                    </div>
-                                </motion.div>
+                                        <motion.div variants={itemVariants}>
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-semibold text-gray-600 ml-1">Email Address</label>
+                                                <input
+                                                    type="email"
+                                                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all duration-300 text-sm font-medium hover:bg-gray-50/80"
+                                                    placeholder="john@example.com"
+                                                />
+                                            </div>
+                                        </motion.div>
 
-                                <motion.div variants={itemVariants}>
-                                    <div className="space-y-1.5" suppressHydrationWarning={true}>
-                                        <label className="text-xs font-semibold text-gray-600 ml-1">Message</label>
-                                        <textarea
-                                            rows={3}
-                                            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all duration-300 text-sm font-medium resize-none hover:bg-gray-50/80"
-                                            placeholder="Tell us about what you're looking for..."
-                                        />
-                                    </div>
-                                </motion.div>
+                                        <motion.div variants={itemVariants}>
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-semibold text-gray-600 ml-1">Message</label>
+                                                <textarea
+                                                    rows={3}
+                                                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all duration-300 text-sm font-medium resize-none hover:bg-gray-50/80"
+                                                    placeholder="Tell us about what you're looking for..."
+                                                />
+                                            </div>
+                                        </motion.div>
 
-                                <motion.div variants={itemVariants} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
-                                    <Button size="lg" className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:to-primary text-white text-base font-bold rounded-lg shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 gap-2 relative overflow-hidden group">
-                                        <span className="relative z-10 flex items-center gap-2">Send Message <Send className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" /></span>
-                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                                    </Button>
-                                </motion.div>
+                                        <motion.div variants={itemVariants} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                                            <Button size="lg" className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:to-primary text-white text-base font-bold rounded-lg shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 gap-2 relative overflow-hidden group">
+                                                <span className="relative z-10 flex items-center gap-2">Send Message <Send className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" /></span>
+                                                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                                            </Button>
+                                        </motion.div>
+                                    </>
+                                )}
                             </form>
                         </div>
                     </motion.div>

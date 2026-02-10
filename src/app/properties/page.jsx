@@ -107,7 +107,12 @@ export default function PropertiesPage() {
                     LEFT PANEL: FILTERING ORCHESTRA (30%) 
                     Sticky Sidebar for Desktop
                 */}
+                {/* 
+                    LEFT PANEL: FILTERING ORCHESTRA (30%) 
+                    Sticky Sidebar for Desktop
+                */}
                 <AnimatePresence mode="popLayout">
+                    {/* Desktop Sidebar */}
                     {isFilterOpen && (
                         <motion.aside
                             initial={{ width: 0, opacity: 0 }}
@@ -141,6 +146,38 @@ export default function PropertiesPage() {
                                 />
                             </div>
                         </motion.aside>
+                    )}
+                </AnimatePresence>
+
+                {/* Mobile Filter Drawer (Overlay) */}
+                <AnimatePresence>
+                    {isFilterOpen && (
+                        <div className="lg:hidden relative z-50">
+                            {/* Backdrop */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setIsFilterOpen(false)}
+                                className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+                            />
+                            {/* Drawer */}
+                            <motion.div
+                                initial={{ x: "-100%" }}
+                                animate={{ x: 0 }}
+                                exit={{ x: "-100%" }}
+                                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                                className="fixed inset-y-0 left-0 w-[85vw] max-w-[360px] h-full shadow-2xl z-50 overflow-hidden"
+                            >
+                                <PropertyFilterPanel
+                                    filters={filters}
+                                    setFilters={setFilters}
+                                    totalCount={propertiesData.length}
+                                    filteredCount={filteredProperties.length}
+                                    onClose={() => setIsFilterOpen(false)}
+                                />
+                            </motion.div>
+                        </div>
                     )}
                 </AnimatePresence>
 
@@ -192,7 +229,7 @@ export default function PropertiesPage() {
                             }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setIsFilterOpen(true)}
-                            className="fixed left-0 top-32 z-40 flex items-center gap-3 pl-4 pr-6 py-4 bg-white/80 backdrop-blur-xl border-y border-r border-white/50 shadow-2xl rounded-r-2xl group overflow-hidden cursor-pointer"
+                            className="fixed left-0 top-24 lg:top-32 z-40 flex items-center gap-2 pl-3 pr-5 py-3 lg:pl-4 lg:pr-6 lg:py-4 bg-white/90 backdrop-blur-xl border-y border-r border-white/50 shadow-2xl rounded-r-xl lg:rounded-r-2xl group overflow-hidden cursor-pointer"
                             style={{
                                 boxShadow: "5px 0 25px -5px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.5)"
                             }}
@@ -203,15 +240,15 @@ export default function PropertiesPage() {
                             {/* Icon Container with Pulse */}
                             <div className="relative">
                                 <div className="absolute inset-0 bg-secondary/20 rounded-full animate-ping opacity-75 md:hidden" />
-                                <div className="relative bg-secondary text-white p-2 rounded-full shadow-lg shadow-secondary/30 group-hover:rotate-180 transition-transform duration-700 ease-in-out">
-                                    <Filter className="h-4 w-4" />
+                                <div className="relative bg-secondary text-white p-1.5 lg:p-2 rounded-full shadow-lg shadow-secondary/30 group-hover:rotate-180 transition-transform duration-700 ease-in-out">
+                                    <Filter className="h-3.5 w-3.5 lg:h-4 lg:w-4" />
                                 </div>
                             </div>
 
                             {/* Text - Vertical Layout Awareness */}
-                            <div className="flex flex-col items-start">
-                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1">Open</span>
-                                <span className="text-sm font-bold text-gray-800 tracking-tight group-hover:text-secondary transition-colors">Filters</span>
+                            <div className="flex flex-col items-start leading-none">
+                                <span className="text-[9px] lg:text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Open</span>
+                                <span className="text-xs lg:text-sm font-bold text-gray-800 tracking-tight group-hover:text-secondary transition-colors">Filters</span>
                             </div>
 
                         </motion.button>

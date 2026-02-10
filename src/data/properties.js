@@ -21,45 +21,61 @@ const AMENITIES_POOL = [
     "Gym", "Security", "Parking", "Wi-Fi", "Power Backup"
 ];
 
-// Curated high-quality Unsplash Collections for variety
-const VILLA_IMAGES = [
-    "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1600596542815-2a4d04774c13?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
-];
+// ULTRA-SAFE VERIFIED IMAGE SET (Re-using best performing images across categories)
+const SAFE_ID_1 = "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80"; // Modern House
+const SAFE_ID_2 = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80"; // White Villa
+const SAFE_ID_3 = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"; // Modern Facade (Replacement for broken link)
 
-const APT_IMAGES = [
-    "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1515263487990-61b07816b324?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
-];
+const SAFE_APT_1 = "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80"; // Modern Living Room
+const SAFE_APT_2 = "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80"; // Loft
+const SAFE_APT_3 = "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80"; // Apartment Building
+
+const VILLA_IMAGES = [SAFE_ID_1, SAFE_ID_2, SAFE_ID_3];
+const APT_IMAGES = [SAFE_APT_1, SAFE_APT_2, SAFE_APT_3];
+const PLOT_IMAGES = [SAFE_APT_3, SAFE_APT_1, SAFE_APT_2]; // Using Apt images for Plots
+const FARM_IMAGES = [SAFE_APT_2, SAFE_APT_3, SAFE_APT_1]; // Using Apt images for Farms
+
+// Title mappings by type for consistency
+const TYPE_TITLES = {
+    "Villa": ["Signature Riverside Villa", "Colonial Heritage Bungalow", "Modern Minimalist Haven", "Royal Palace Residence", "Garden Grove Villa", "Luxury Courtyard Home"],
+    "Apartment": ["Sky-High Luxury Penthouse", "Urban Chic Apartment", "Architectural Masterpiece", "Premium City Suite", "Infinity Tower Flat"],
+    "Plot": ["Prime Riverside Plot", "Commercial Highway Land", "Exclusive Gated Plot", "Scenic Hilltop Land"],
+    "Farmhouse": ["Greenfield Farm Estate", "Serene Plantation Retreat", "Organic Eco Farm Stay", "Weekend Getaway Farm"]
+};
 
 const generateProperties = () => {
     return Array.from({ length: 108 }, (_, i) => {
         const typeOffset = i % 4;
         const type = PROPERTY_TYPES[typeOffset];
         const location = LOCATIONS[i % LOCATIONS.length];
-        const titleBase = TITLES[i % TITLES.length];
 
-        // Price Calculation with some randomness
-        // Base: 40L, Max: 5Cr
+        // Pick a relevant title for the type
+        const typeSpecificTitles = TYPE_TITLES[type] || TITLES;
+        const titleBase = typeSpecificTitles[i % typeSpecificTitles.length];
+
+        // Price Calculation
         const basePrice = 4000000;
         const priceMultiplier = (i % 20) + 1;
         const price = basePrice + (priceMultiplier * 2500000);
 
         // Images allocation
-        const baseImages = type === "Apartment" ? APT_IMAGES : VILLA_IMAGES;
-        // Shift images to create variety
+        let baseImages = VILLA_IMAGES;
+        if (type === "Apartment") baseImages = APT_IMAGES;
+        else if (type === "Plot") baseImages = PLOT_IMAGES;
+        else if (type === "Farmhouse") baseImages = FARM_IMAGES;
+
+        // Shift images to create variety - Ensure modulo always hits a valid index
+        const imgCount = baseImages.length;
+        const secondIndex = (i + 1) % imgCount;
+        const thirdIndex = (i + 2) % imgCount;
+
         const images = [
-            baseImages[i % baseImages.length],
-            baseImages[(i + 1) % baseImages.length],
-            baseImages[(i + 2) % baseImages.length]
+            baseImages[i % imgCount],
+            baseImages[secondIndex],
+            baseImages[thirdIndex]
         ];
 
-        // Random Amenities (3-6 per property)
+        // Random Amenities
         const amenityCount = (i % 4) + 3;
         const amenities = [];
         for (let j = 0; j < amenityCount; j++) {
@@ -72,16 +88,18 @@ const generateProperties = () => {
             type: type,
             location: location,
             price: price,
-            bhk: (i % 5) + 2, // 2 to 6 BHK
-            baths: (i % 5) + 2, // Matches BHK for simplicity
-            sqft: 1200 + (i * 85),
-            landArea: 5 + (i % 20), // In Cents (5 - 24 cents)
+            bhk: type === "Plot" ? 0 : (i % 5) + 2,
+            baths: type === "Plot" ? 0 : (i % 5) + 2,
+            sqft: type === "Plot" ? (5 + (i % 20)) * 435 : 1200 + (i * 85),
+            landArea: 5 + (i % 20),
             status: i % 7 === 0 ? "Hot Deal" : i % 5 === 0 ? "Featured" : "New",
             images: images,
+            image: images[0], // Explicit fallback
             amenities: amenities,
-            coordinates: { // Pseudo-coordinates for Map viz
-                lat: 10.5276 + (Math.random() * 0.1),
-                lng: 76.2144 + (Math.random() * 0.1)
+            // DETERMINISTIC COORDINATES - No Math.random() to prevent hydration mismatch
+            coordinates: {
+                lat: 10.5276 + ((i % 10) * 0.01),
+                lng: 76.2144 + ((i % 10) * 0.01)
             },
             agent: {
                 name: "Thrissur Elite Realty",

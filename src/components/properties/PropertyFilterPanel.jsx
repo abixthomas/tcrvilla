@@ -77,7 +77,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
     }, [filters.landRange])
 
     // Location Dropdown State
-    const [isLocOpen, setIsLocOpen] = useState(false)
+    const [isLocOpen, setIsLocOpen] = useState(true)
     const [locSearch, setLocSearch] = useState("")
 
     // Handlers
