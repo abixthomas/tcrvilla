@@ -2,99 +2,106 @@
 
 import React from "react"
 import { motion } from "framer-motion"
-import { CheckCircle, MapPin, Share2, Heart } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { MapPin, BedDouble, Bath, Ruler, CheckCircle, Home, Calendar } from "lucide-react"
 
 export function PropertyHero({ property }) {
+    if (!property) return null
+
+    // Helper to format price
+    const formatPrice = (price) => {
+        if (price >= 10000000) {
+            return `₹ ${(price / 10000000).toFixed(2)} Cr`
+        }
+        return `₹ ${(price / 100000).toFixed(2)} L`
+    }
+
+    const stats = [
+        { label: "Bedrooms", value: `${property.beds} BHK`, icon: BedDouble },
+        { label: "Bathrooms", value: `${property.baths} Baths`, icon: Bath },
+        { label: "Area", value: `${property.sqft} Sq.ft`, icon: Ruler },
+        { label: "Type", value: property.type, icon: Home },
+        { label: "Built", value: "2024", icon: Calendar },
+    ]
 
     return (
-        <section className="bg-white">
-            {/* 1. Cinematic Hero (Solid Background) */}
-            <div className="relative h-[40vh] min-h-[400px] overflow-hidden bg-[#0f172a] flex items-end pb-12 group">
+        <section className="bg-white border-b border-gray-100 pt-32 pb-8">
+            <div className="container mx-auto px-4 md:px-6">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
 
-                {/* Background Texture (Blobs) */}
-                <div className="absolute inset-0 opacity-20 pointer-events-none z-0">
-                    <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-secondary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
-                </div>
-
-                {/* Content (Centered & Cinematic) */}
-                <div className="container mx-auto px-4 relative z-10 flex flex-col justify-center items-center h-full pt-20 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="max-w-4xl"
-                    >
-                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-medium text-white tracking-tight leading-[1] drop-shadow-2xl mb-4">
-                            {property.title}
-                        </h1>
-                        <p className="text-gray-300 text-lg md:text-xl font-light tracking-wide flex items-center justify-center gap-2">
-                            <MapPin className="w-4 h-4 text-secondary" /> {property.location}, Thrissur
-                        </p>
-                    </motion.div>
-                </div>
-
-            </div>
-
-            {/* 2. Primary Details Header (Compact) */}
-            <div className="border-b border-gray-100 bg-white">
-                <div className="container mx-auto px-4 md:px-6 py-6">
-                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4">
-
-                        {/* Title & Location */}
-                        <div className="space-y-2 max-w-3xl">
-                            {/* Badges */}
-                            <div className="flex items-center gap-2">
-                                <span className="bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded">
-                                    {property.type}
+                    {/* Left: Title & Location */}
+                    <div className="space-y-4 max-w-3xl">
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex items-center gap-3"
+                        >
+                            <span className="bg-secondary/10 text-secondary text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                                {property.status || "For Sale"}
+                            </span>
+                            {property.featured && (
+                                <span className="flex items-center gap-1.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-emerald-100">
+                                    <CheckCircle className="w-3 h-3" />
+                                    Verified Property
                                 </span>
-                                {property.status && (
-                                    <div className="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">
-                                        <CheckCircle className="w-3 h-3" />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest">Verified</span>
-                                    </div>
-                                )}
-                            </div>
+                            )}
+                        </motion.div>
 
-                            <h1 className="text-2xl md:text-3xl font-display font-medium text-gray-900 leading-tight">
+                        <div>
+                            <motion.h1
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1 }}
+                                className="text-3xl md:text-5xl font-display font-medium text-gray-900 leading-tight mb-3"
+                            >
                                 {property.title}
-                            </h1>
+                            </motion.h1>
 
-                            <div className="flex flex-wrap items-center gap-3 text-gray-500 text-xs md:text-sm">
-                                <div className="flex items-center gap-1.5">
-                                    <MapPin className="w-3.5 h-3.5 text-secondary" />
-                                    <span>{property.location}, Thrissur</span>
-                                </div>
-                                <span className="hidden md:block text-gray-300">|</span>
-                                <div className="flex items-center gap-1.5">
-                                    <span className="font-semibold text-gray-900">ID:</span>
-                                    <span>KUS929</span>
-                                </div>
-                            </div>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.2 }}
+                                className="flex items-center gap-2 text-gray-500"
+                            >
+                                <MapPin className="w-4 h-4 text-secondary" />
+                                <span className="text-base font-medium">{property.location}, Thrissur</span>
+                            </motion.div>
                         </div>
 
-                        {/* Price & Actions */}
-                        <div className="flex flex-col items-start lg:items-end gap-3 w-full lg:w-auto">
-                            <div className="text-left lg:text-right">
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Asking Price</p>
-                                <div className="text-2xl md:text-4xl font-display font-medium text-secondary">
-                                    ₹{(property.price / 100000).toFixed(2)}<span className="text-xl md:text-2xl">L</span>
+                        {/* Quick Stats Grid */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="flex flex-wrap gap-4 pt-2"
+                        >
+                            {stats.map((stat, idx) => (
+                                <div key={idx} className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors">
+                                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-secondary shadow-sm">
+                                        <stat.icon className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{stat.label}</p>
+                                        <p className="text-sm font-bold text-gray-900">{stat.value}</p>
+                                    </div>
                                 </div>
-                                <p className="text-[9px] text-gray-400">*Excluding registration</p>
-                            </div>
-
-                            <div className="flex items-center gap-2 w-full sm:w-auto">
-                                <Button variant="outline" className="flex-1 h-10 text-xs border-gray-200 hover:border-gray-900 hover:bg-gray-900 hover:text-white rounded-lg gap-1.5 transition-all">
-                                    <Share2 className="w-3.5 h-3.5" /> Share
-                                </Button>
-                                <Button variant="outline" className="flex-1 h-10 text-xs border-gray-200 hover:border-red-500 hover:text-red-500 rounded-lg gap-1.5 transition-all">
-                                    <Heart className="w-3.5 h-3.5" /> Save
-                                </Button>
-                            </div>
-                        </div>
-
+                            ))}
+                        </motion.div>
                     </div>
+
+                    {/* Right: Price */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="flex flex-col items-start lg:items-end bg-gray-900 p-6 rounded-2xl text-white shadow-xl lg:min-w-[280px]"
+                    >
+                        <span className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">Asking Price</span>
+                        <div className="text-3xl md:text-4xl font-display font-bold text-white mb-1">
+                            {formatPrice(property.price)}
+                        </div>
+                        <p className="text-white/40 text-[10px]">*Excluding registration fees</p>
+                    </motion.div>
+
                 </div>
             </div>
         </section>
