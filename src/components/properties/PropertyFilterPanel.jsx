@@ -53,6 +53,50 @@ const FilterSection = ({ value, title, icon: Icon, children }) => (
     </Accordion.Item>
 )
 
+// --- HOOKS ---
+const useDragScroll = () => {
+    const ref = useRef(null)
+    const dragInfo = useRef({ isDown: false, startY: 0, scrollTop: 0, wasDragging: false })
+
+    const onPointerDown = (e) => {
+        ref.current.setPointerCapture(e.pointerId)
+        dragInfo.current.isDown = true
+        dragInfo.current.startY = e.clientY
+        dragInfo.current.scrollTop = ref.current.scrollTop
+        dragInfo.current.wasDragging = false
+        ref.current.style.cursor = 'grabbing'
+        ref.current.style.userSelect = 'none'
+    }
+
+    const onPointerUp = (e) => {
+        dragInfo.current.isDown = false
+        if (ref.current) {
+            ref.current.style.cursor = 'grab'
+            ref.current.style.removeProperty('user-select')
+            ref.current.releasePointerCapture(e.pointerId)
+        }
+    }
+
+    const onPointerMove = (e) => {
+        if (!dragInfo.current.isDown) return
+        e.preventDefault()
+        const walk = (e.clientY - dragInfo.current.startY) * 1.5
+        if (Math.abs(walk) > 5) dragInfo.current.wasDragging = true
+        ref.current.scrollTop = dragInfo.current.scrollTop - walk
+    }
+
+    return {
+        ref,
+        props: {
+            onPointerDown,
+            onPointerUp,
+            onPointerMove,
+            style: { cursor: 'grab' }
+        },
+        wasDragging: () => dragInfo.current.wasDragging
+    }
+}
+
 export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClose }) {
     // Local State to handle high-frequency slider updates before committing to parent
     const [localPrice, setLocalPrice] = useState(filters.priceRange)
@@ -80,11 +124,16 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
     }, [filters.landRange])
 
     // Location Dropdown State
-    const [isLocOpen, setIsLocOpen] = useState(true)
+    const [isLocOpen, setIsLocOpen] = useState(false)
     const [locSearch, setLocSearch] = useState("")
+
+    // Drag to Scroll Logic
+    const locationScroll = useDragScroll()
+    const mainPanelScroll = useDragScroll()
 
     // Handlers
     const handleLocationToggle = (loc) => {
+        if (locationScroll.wasDragging()) return // Prevent click if actually dragged
         setFilters(prev => {
             const current = prev.locations || []
             return {
@@ -154,7 +203,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
             animate="visible"
             exit="exit"
             variants={containerVariants}
-            className="w-full md:w-[360px] h-full flex flex-col bg-white/80 backdrop-blur-xl border-l border-white/40 shadow-2xl relative sticky top-20"
+            className="w-full md:w-[360px] h-[calc(100vh-6rem)] flex flex-col bg-white/80 backdrop-blur-xl border-l border-t border-slate-100/40 shadow-2xl relative sticky top-20 rounded-bl-3xl"
         >
             {/* NOISE TEXTURE OVERLAY */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
@@ -185,7 +234,12 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
             </div>
 
             {/* SCROLLABLE CONTENT */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 relative z-10">
+            <div
+                ref={mainPanelScroll.ref}
+                {...mainPanelScroll.props}
+                data-lenis-prevent // Critical: Prevent chaining to parent scroll
+                className="flex-1 overflow-y-auto pl-6 py-6 pr-1 relative z-10 custom-scrollbar touch-pan-y"
+            >
                 <Accordion.Root type="multiple" defaultValue={['location', 'price', 'land', 'rooms']} className="space-y-1">
 
                     {/* 1. LOCATION (Inline Expandable List) */}
@@ -216,18 +270,25 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                                                     placeholder="Search..."
                                                     value={locSearch}
                                                     onChange={e => setLocSearch(e.target.value)}
+                                                    onPointerDown={(e) => e.stopPropagation()} // Allow input focus
                                                     className="w-full bg-slate-50 border border-slate-100 rounded-lg py-2 pl-8 pr-3 text-xs font-medium focus:ring-2 focus:ring-red-500/20 outline-none"
                                                 />
                                             </div>
-                                            <div className="max-h-48 overflow-y-auto custom-scrollbar border border-slate-100 rounded-lg bg-slate-50/50 p-1">
+                                            <div
+                                                ref={locationScroll.ref}
+                                                {...locationScroll.props}
+                                                className="max-h-48 overflow-y-auto border border-slate-100 rounded-lg bg-slate-50/50 p-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] touch-pan-y"
+                                            >
                                                 {LOCATIONS.filter(l => l.toLowerCase().includes(locSearch.toLowerCase())).map(loc => {
                                                     const isSelected = (filters.locations || []).includes(loc)
                                                     return (
                                                         <div
                                                             key={loc}
-                                                            onClick={() => handleLocationToggle(loc)}
+                                                            onClick={(e) => {
+                                                                handleLocationToggle(loc)
+                                                            }}
                                                             className={cn(
-                                                                "flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer text-xs font-medium transition-colors",
+                                                                "flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors select-none",
                                                                 isSelected ? "bg-white text-red-600 shadow-sm" : "hover:bg-slate-100/50 text-slate-600"
                                                             )}
                                                         >
@@ -316,6 +377,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                             max={landUnit === 'acre' ? 1000 : 100} // 10 Acres = 1000 Cents
                             step={landUnit === 'acre' ? 5 : 1}
                             onValueChange={setLocalLand}
+                            onPointerDown={(e) => e.stopPropagation()} // Stop propagation for sliders
                         >
                             <Slider.Track className="bg-slate-100 relative grow rounded-full h-1.5 overflow-hidden">
                                 <Slider.Range className="absolute bg-gradient-to-r from-red-400 to-red-600 h-full rounded-full" />
@@ -350,6 +412,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                                 max={1500}
                                 step={10}
                                 onValueChange={setLocalPrice}
+                                onPointerDown={(e) => e.stopPropagation()} // Stop propagation for sliders
                             >
                                 <Slider.Track className="bg-slate-100 relative grow rounded-full h-1.5 overflow-hidden">
                                     <Slider.Range className="absolute bg-gradient-to-r from-slate-400 to-slate-900 h-full rounded-full group-hover:from-red-400 group-hover:to-red-600 transition-all" />
