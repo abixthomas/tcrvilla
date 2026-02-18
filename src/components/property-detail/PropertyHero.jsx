@@ -1,10 +1,18 @@
 "use client"
 
-import React from "react"
-import { motion } from "framer-motion"
-import { MapPin, BedDouble, Bath, Ruler, CheckCircle, Home, Calendar } from "lucide-react"
+import React, { useRef } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { MapPin, BedDouble, Bath, Ruler, CheckCircle, Home, Calendar, ArrowDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function PropertyHero({ property }) {
+    const containerRef = useRef(null)
+    const { scrollY } = useScroll()
+
+    // Parallax effect for the background image
+    const y = useTransform(scrollY, [0, 500], [0, 150])
+    const opacity = useTransform(scrollY, [0, 300], [1, 0])
+
     if (!property) return null
 
     // Helper to format price
@@ -20,84 +28,83 @@ export function PropertyHero({ property }) {
         { label: "Bathrooms", value: `${property.baths} Baths`, icon: Bath },
         { label: "Area", value: `${property.sqft} Sq.ft`, icon: Ruler },
         { label: "Type", value: property.type, icon: Home },
-        { label: "Built", value: "2024", icon: Calendar },
     ]
 
+    // Use first image if available, else property.image
+    const bgImage = (property.images && property.images.length > 0) ? property.images[0] : property.image
+
     return (
-        <section className="bg-white border-b border-gray-100 pt-32 pb-8">
-            <div className="container mx-auto px-4 md:px-6">
-                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+        <section ref={containerRef} className="relative h-[55vh] min-h-[500px] w-full overflow-hidden flex items-end bg-[#1E3A8A]">
+            {/* Blueprint Pattern Background */}
+            <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+                <div className="absolute inset-0"
+                    style={{
+                        backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+                        backgroundSize: '40px 40px'
+                    }}
+                />
+                {/* Diagonal lines for architectural feel */}
+                <div className="absolute top-0 right-0 w-[500px] h-full border-l border-white/10 rotate-12 origin-top-right transform translate-x-20" />
+                <div className="absolute top-0 right-0 w-[500px] h-full border-l border-white/10 -rotate-12 origin-top-right transform translate-x-40" />
+            </div>
 
-                    {/* Left: Title & Location */}
-                    <div className="space-y-4 max-w-3xl">
+            {/* Content Container */}
+            <div className="container mx-auto px-4 md:px-6 relative z-30 pb-16">
+                <div className="flex flex-col lg:flex-row items-end justify-between gap-8">
+
+                    {/* Left: Title & Stats */}
+                    <div className="w-full lg:max-w-4xl space-y-8">
                         <motion.div
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="flex items-center gap-3"
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="space-y-4"
                         >
+                            {/* Title */}
+                            <h1 className="text-4xl md:text-6xl font-display font-medium text-white leading-tight">
+                                {property.title}
+                            </h1>
 
-                            {property.featured && (
-                                <span className="flex items-center gap-1.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-emerald-100">
-                                    <CheckCircle className="w-3 h-3" />
-                                    Verified Property
-                                </span>
-                            )}
+                            {/* Location (Hidden or subtle in this view? Keeping it for context) */}
+                            {/* <div className="flex items-center gap-2 text-blue-200 text-lg">
+                                <MapPin className="w-5 h-5" />
+                                <span className="font-light">{property.location}, Thrissur</span>
+                            </div> */}
                         </motion.div>
 
-                        <div>
-                            <motion.h1
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1 }}
-                                className="text-3xl md:text-5xl font-display font-medium text-primary leading-tight mb-3"
-                            >
-                                {property.title}
-                            </motion.h1>
-
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.2 }}
-                                className="flex items-center gap-2 text-gray-500"
-                            >
-                                <MapPin className="w-4 h-4 text-secondary" />
-                                <span className="text-base font-medium">{property.location}, Thrissur</span>
-                            </motion.div>
-                        </div>
-
-                        {/* Quick Stats Grid */}
+                        {/* Styled Stats Cards */}
                         <motion.div
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="flex flex-wrap gap-4 pt-2"
+                            transition={{ delay: 0.2, duration: 0.8 }}
+                            className="flex flex-wrap gap-4"
                         >
                             {stats.map((stat, idx) => (
-                                <div key={idx} className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors">
-                                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-secondary shadow-sm">
-                                        <stat.icon className="w-4 h-4" />
+                                <div key={idx} className="flex items-center px-5 py-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-lg hover:bg-white/10 transition-colors min-w-[180px]">
+                                    {/* Red Icon Circle */}
+                                    <div className="w-10 h-10 rounded-full bg-[#ef4444] flex items-center justify-center mr-4 shadow-md shrink-0">
+                                        <stat.icon className="w-5 h-5 text-white" />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{stat.label}</p>
-                                        <p className="text-sm font-bold text-primary">{stat.value}</p>
+                                        <p className="text-[10px] uppercase tracking-widest text-blue-200 mb-0.5">{stat.label}</p>
+                                        <p className="text-xl font-display font-medium text-white leading-none pb-1">{stat.value}</p>
                                     </div>
                                 </div>
                             ))}
                         </motion.div>
                     </div>
 
-                    {/* Right: Price - Simplified & Minimal */}
+                    {/* Right: Price */}
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="flex flex-col items-start lg:items-end lg:min-w-[280px]"
+                        transition={{ delay: 0.4, duration: 0.8 }}
+                        className="w-full lg:w-auto flex flex-col items-start lg:items-end mb-2"
                     >
-                        <span className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-1">Asking Price</span>
-                        <div className="text-4xl md:text-5xl font-display font-medium text-primary mb-1">
+                        <div className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white tracking-tight">
                             {formatPrice(property.price)}
                         </div>
-                        <p className="text-gray-400 text-[10px]">*Excluding registration fees</p>
+                        <p className="text-blue-200 text-xs tracking-wide">*Excluding registration & taxes</p>
                     </motion.div>
 
                 </div>

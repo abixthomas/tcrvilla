@@ -32,7 +32,7 @@ export default function PropertyDetailPage() {
 
     return (
         <main className="min-h-screen bg-gray-50/50">
-            <Navbar />
+            <Navbar variant="transparent" />
 
             {/* 1. New Header Section */}
             <PropertyHero property={property} />

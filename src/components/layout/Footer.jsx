@@ -1,11 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin, ArrowUp } from "lucide-react"
+import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import ThrissurVillasLogo from "@/components/brand/Logo"
 
-import { useState, useEffect } from "react"
 
 export function Footer() {
     const [mounted, setMounted] = useState(false)
@@ -14,8 +14,10 @@ export function Footer() {
         setMounted(true)
     }, [])
 
+
+
     return (
-        <footer className="bg-primary text-white pt-16 pb-8 relative overflow-hidden">
+        <footer className="bg-gray-900 text-white pt-20 pb-10 relative w-full">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-5 pointer-events-none">
                 <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">

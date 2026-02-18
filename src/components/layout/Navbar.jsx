@@ -18,7 +18,7 @@ const navItems = [
     { name: "Contact", href: "/#contact" },
 ]
 
-export function Navbar() {
+export function Navbar({ variant = "default" }) {
     const [isScrolled, setIsScrolled] = React.useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
     const pathname = usePathname()
@@ -80,7 +80,12 @@ export function Navbar() {
                     "fixed left-0 right-0 z-50 transition-all duration-500",
                     isScrolled
                         ? "top-0 bg-white/95 backdrop-blur-md shadow-lg py-3 border-b border-gray-100"
-                        : "top-10 bg-gradient-to-b from-primary/90 via-primary/40 to-transparent py-6"
+                        : cn(
+                            "top-0 pt-4 md:pt-14 pb-6",
+                            variant === "transparent"
+                                ? "bg-transparent"
+                                : "bg-gradient-to-b from-primary/90 via-primary/40 to-transparent"
+                        )
                 )}
             >
                 <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
@@ -124,16 +129,18 @@ export function Navbar() {
 
                     {/* CTA Button */}
                     <div className="hidden md:block">
-                        <Button
-                            className={cn(
-                                "rounded-full shadow-lg font-bold tracking-wide transition-all transform hover:scale-105",
-                                isScrolled
-                                    ? "bg-secondary text-white hover:bg-secondary/90"
-                                    : "bg-white text-primary hover:bg-gray-100"
-                            )}
-                        >
-                            Post Free Ad
-                        </Button>
+                        <Link href="/post-ad">
+                            <Button
+                                className={cn(
+                                    "rounded-full shadow-lg font-bold tracking-wide transition-all transform hover:scale-105",
+                                    isScrolled
+                                        ? "bg-secondary text-white hover:bg-secondary/90"
+                                        : "bg-white text-primary hover:bg-gray-100"
+                                )}
+                            >
+                                Post Free Ad
+                            </Button>
+                        </Link>
                     </div>
 
                     {/* Mobile Toggle */}
@@ -179,9 +186,11 @@ export function Navbar() {
                                         <ChevronDown className={cn("h-4 w-4 -rotate-90", isActive(item) ? "text-primary" : "text-gray-400")} />
                                     </Link>
                                 ))}
-                                <Button className="w-full mt-4 bg-primary text-white">
-                                    Post Free Ad
-                                </Button>
+                                <Link href="/post-ad" className="w-full mt-4">
+                                    <Button className="w-full bg-primary text-white">
+                                        Post Free Ad
+                                    </Button>
+                                </Link>
                                 <div className="mt-6 p-4 bg-gray-50 rounded-xl">
                                     <p className="text-secondary font-bold text-xs uppercase tracking-widest mb-2">Contact Us</p>
                                     <p className="text-gray-700 font-medium">+91 9846 123 456</p>

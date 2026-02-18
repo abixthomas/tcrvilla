@@ -7,6 +7,9 @@ import * as Slider from "@radix-ui/react-slider"
 import * as Accordion from "@radix-ui/react-accordion"
 import { Search, X, ChevronDown, Check, Filter, MapPin, Sparkles, MoveRight } from "lucide-react"
 import { cn } from "@/lib/utils"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 // --- UTILS ---
 const formatCurrency = (val) => {
@@ -92,6 +95,43 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
     }
 
     // Variants
+    const containerRef = useRef(null)
+
+    useGSAP(() => {
+        // Sticky Intelligence - Docking to top
+        // Note: Using CSS position:sticky is often smoother for simple docking, 
+        // but GSAP can handle the "breathing" trigger when stuck.
+
+        ScrollTrigger.create({
+            trigger: containerRef.current,
+            start: "top top+=80", // Adjust based on navbar height
+            end: "bottom bottom",
+            onToggle: (self) => {
+                if (self.isActive) {
+                    gsap.to(containerRef.current, {
+                        boxShadow: "0 0 20px rgba(239, 68, 68, 0.15)",
+                        duration: 0.5
+                    })
+                } else {
+                    gsap.to(containerRef.current, {
+                        boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)", // Reset to default tailwind shadow-2xl equivalent
+                        duration: 0.5
+                    })
+                }
+            }
+        })
+
+        // Breathing Glow Animation (Idle State)
+        gsap.to(containerRef.current, {
+            boxShadow: "0 0 30px rgba(239, 68, 68, 0.1)",
+            repeat: -1,
+            yoyo: true,
+            duration: 2,
+            ease: "sine.inOut"
+        })
+
+    }, { scope: containerRef })
+
     const containerVariants = {
         hidden: { x: "100%", opacity: 0 },
         visible: {
@@ -109,11 +149,12 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
 
     return (
         <motion.aside
+            ref={containerRef}
             initial="hidden"
             animate="visible"
             exit="exit"
             variants={containerVariants}
-            className="w-full md:w-[360px] h-full flex flex-col bg-white/80 backdrop-blur-xl border-l border-white/40 shadow-2xl relative"
+            className="w-full md:w-[360px] h-full flex flex-col bg-white/80 backdrop-blur-xl border-l border-white/40 shadow-2xl relative sticky top-20"
         >
             {/* NOISE TEXTURE OVERLAY */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>

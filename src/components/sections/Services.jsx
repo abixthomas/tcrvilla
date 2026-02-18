@@ -1,14 +1,9 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import {
-    motion,
-    useMotionTemplate,
-    useMotionValue,
-    useSpring,
-    useTransform,
-    useInView,
-} from "framer-motion";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
     Home,
     Key,
@@ -76,88 +71,17 @@ const ROTATION_RANGE = 15; // Reduced
 const HALF_ROTATION_RANGE = ROTATION_RANGE / 2;
 
 function TiltCard({ service, index }) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", once: false });
-    const [isMobile, setIsMobile] = useState(false);
+    const cardRef = useRef(null);
 
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-
-    const xSpring = useSpring(x);
-    const ySpring = useSpring(y);
-
-    const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${ySpring}deg)`;
-
-    useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(window.matchMedia("(max-width: 768px)").matches);
-        };
-        checkMobile();
-        window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
-    }, []);
-
-    // Auto-play tilt on mobile when in view
-    useEffect(() => {
-        if (isMobile && isInView) {
-            const interval = setInterval(() => {
-                const time = Date.now() / 1500;
-                x.set(Math.sin(time) * 3);
-                y.set(Math.cos(time) * 3);
-            }, 16);
-            return () => clearInterval(interval);
-        } else if (isMobile && !isInView) {
-            x.set(0);
-            y.set(0);
-        }
-    }, [isMobile, isInView, x, y]);
-
-    const handleMouseMove = (e) => {
-        if (isMobile || !ref.current) return;
-
-        const rect = ref.current.getBoundingClientRect();
-
-        const width = rect.width;
-        const height = rect.height;
-
-        const mouseX = (e.clientX - rect.left) * ROTATION_RANGE;
-        const mouseY = (e.clientY - rect.top) * ROTATION_RANGE;
-
-        const rX = (mouseY / height - HALF_ROTATION_RANGE) * -1;
-        const rY = mouseX / width - HALF_ROTATION_RANGE;
-
-        x.set(rX);
-        y.set(rY);
-    };
-
-    const handleMouseLeave = () => {
-        if (isMobile) return;
-        x.set(0);
-        y.set(0);
-    };
+    // Existing tilt logic replaced with GSAP 3D entrance
+    // The user requested: "Trigger the entrance of the cards from the right side. As they enter, add a slight rotationY that straightens out (0deg) as they hit the center focus area."
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-                type: "spring",
-                damping: 20,
-                stiffness: 100,
-                delay: index * 0.05,
-            }}
-            viewport={{ once: true, margin: "-10%" }}
-            ref={ref}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{ transformStyle: "preserve-3d", transform }}
-            className="relative h-full"
+        <div
+            ref={cardRef}
+            className="card-container relative h-full perspective-1000 opacity-0 will-change-transform" // Initial opacity 0 for GSAP to handle
         >
             <div
-                style={{
-                    transform: "translateZ(50px)",
-                    transformStyle: "preserve-3d",
-                }}
                 className={`group relative h-full bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden ${service.shadow}`}
             >
                 {/* Animated Background Mesh */}
@@ -199,13 +123,45 @@ function TiltCard({ service, index }) {
                     <div className={`absolute -bottom-8 -right-8 w-24 h-24 bg-gradient-to-br ${service.gradient} opacity-5 rounded-full blur-xl group-hover:opacity-10 transition-opacity duration-500`} />
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 }
 
 export function Services() {
+    const containerRef = useRef(null)
+
+    useGSAP(() => {
+        // 1. Pinning totally removed. Title flows normally.
+
+        // 2. 3D Card Entrance from Right
+        const cards = gsap.utils.toArray(".card-container")
+
+        cards.forEach((card, i) => {
+            gsap.fromTo(card,
+                {
+                    x: 100, // From right
+                    opacity: 0,
+                    rotationY: 45, // Angled
+                },
+                {
+                    x: 0,
+                    opacity: 1,
+                    rotationY: 0, // Straighten out
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 85%", // When card top hits 85% of viewport height
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            )
+        })
+
+    }, { scope: containerRef })
+
     return (
-        <section id="services" className="relative py-16 md:py-24 bg-white overflow-hidden">
+        <section ref={containerRef} id="services" className="relative py-16 md:py-24 bg-white overflow-hidden">
             {/* Cinema-quality Background Elements - Themed */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-[20%] -right-[10%] w-[70vw] h-[70vw] bg-primary/3 rounded-full blur-[100px] mix-blend-multiply animate-blob" />
@@ -214,41 +170,29 @@ export function Services() {
             </div>
 
             <div className="container mx-auto px-4 relative z-10">
-                <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.6 }}
-                        viewport={{ once: true }}
+                <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16 bg-white/80 backdrop-blur-sm p-4 rounded-3xl z-20">
+                    <div
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-100 shadow-sm mb-6"
                     >
                         <Star className="w-3.5 h-3.5 text-secondary fill-secondary" />
                         <span className="text-gray-800 font-bold uppercase tracking-widest text-[10px] md:text-xs">Excellence in Every Detail</span>
-                    </motion.div>
+                    </div>
 
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-                        viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-display font-medium text-gray-900 mb-6 leading-tight tracking-tight"
+                    <h2
+                        className="text-4xl md:text-5xl font-display font-medium text-gray-900 mb-6 leading-relaxed py-4"
                     >
                         Beyond Ordinary <br />
-                        <span className="text-gradient-elite relative">
+                        <span className="text-gradient-elite relative inline-block pb-2">
                             Real Estate Services
                             <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-primary to-secondary opacity-30 rounded-full"></span>
                         </span>
-                    </motion.h2>
+                    </h2>
 
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-                        viewport={{ once: true }}
+                    <p
                         className="text-gray-500 text-lg leading-relaxed max-w-2xl mx-auto font-light"
                     >
                         We redefine the property experience with a suite of white-glove services designed for the most discerning clients.
-                    </motion.p>
+                    </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 perspective-1000">

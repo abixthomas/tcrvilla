@@ -33,6 +33,8 @@ export function PropertyCard({ property, index }) {
                     <img
                         src={imgSrc}
                         alt={property.title}
+                        loading={index < 6 ? "eager" : "lazy"}
+                        decoding="async"
                         onError={() => {
                             if (imgSrc !== fallbackImage) {
                                 setImgSrc(fallbackImage);

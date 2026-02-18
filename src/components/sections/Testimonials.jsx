@@ -21,7 +21,7 @@ const testimonials = [
     {
         name: "Sarah Thomas",
         role: "NRI Investor, Dubai",
-        image: "https://images.unsplash.com/photo-1573496359-7014228112f4?q=80&w=200&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=200&auto=format&fit=crop",
         quote: "Living abroad, I was worried about the paperwork and legalities. The team handled everything remotely with complete transparency. I bought my dream villa without even flying down!",
         rating: 5
     },
