@@ -3,7 +3,9 @@ import { Inter, Montserrat, Playfair_Display } from "next/font/google"; // Swapp
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
+
 import { Footer } from "@/components/layout/Footer";
+import { LenisProvider } from "@/components/providers/LenisProvider";
 
 // Body Component - Tall x-height for max legibility
 const inter = Inter({
@@ -42,11 +44,13 @@ export default function RootLayout({ children }) {
           playfair.variable
         )}
       >
-        <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
+        <LenisProvider>
+          <Navbar />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+        </LenisProvider>
       </body>
     </html>
   );

@@ -35,9 +35,7 @@ export function PropertyHero({ property }) {
                             animate={{ opacity: 1, y: 0 }}
                             className="flex items-center gap-3"
                         >
-                            <span className="bg-secondary/10 text-secondary text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                                {property.status || "For Sale"}
-                            </span>
+
                             {property.featured && (
                                 <span className="flex items-center gap-1.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-emerald-100">
                                     <CheckCircle className="w-3 h-3" />
@@ -51,7 +49,7 @@ export function PropertyHero({ property }) {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.1 }}
-                                className="text-3xl md:text-5xl font-display font-medium text-gray-900 leading-tight mb-3"
+                                className="text-3xl md:text-5xl font-display font-medium text-primary leading-tight mb-3"
                             >
                                 {property.title}
                             </motion.h1>
@@ -81,25 +79,25 @@ export function PropertyHero({ property }) {
                                     </div>
                                     <div>
                                         <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{stat.label}</p>
-                                        <p className="text-sm font-bold text-gray-900">{stat.value}</p>
+                                        <p className="text-sm font-bold text-primary">{stat.value}</p>
                                     </div>
                                 </div>
                             ))}
                         </motion.div>
                     </div>
 
-                    {/* Right: Price */}
+                    {/* Right: Price - Simplified & Minimal */}
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="flex flex-col items-start lg:items-end bg-gray-900 p-6 rounded-2xl text-white shadow-xl lg:min-w-[280px]"
+                        className="flex flex-col items-start lg:items-end lg:min-w-[280px]"
                     >
-                        <span className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">Asking Price</span>
-                        <div className="text-3xl md:text-4xl font-display font-bold text-white mb-1">
+                        <span className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-1">Asking Price</span>
+                        <div className="text-4xl md:text-5xl font-display font-medium text-primary mb-1">
                             {formatPrice(property.price)}
                         </div>
-                        <p className="text-white/40 text-[10px]">*Excluding registration fees</p>
+                        <p className="text-gray-400 text-[10px]">*Excluding registration fees</p>
                     </motion.div>
 
                 </div>

@@ -37,7 +37,11 @@ export function PropertyInfoBar({ property }) {
 
                         <div className="flex items-center gap-4">
                             <div className="text-right mr-4 hidden sm:block">
-                                <span className="block text-2xl font-display font-bold text-primary"> ₹{(property.price / 100000).toFixed(1)}L</span>
+                                <span className="block text-2xl font-display font-bold text-primary">
+                                    {property.price >= 10000000
+                                        ? `₹ ${(property.price / 10000000).toFixed(2)} Cr`
+                                        : `₹ ${(property.price / 100000).toFixed(2)} L`}
+                                </span>
                             </div>
                             <Button variant="outline" className="hidden sm:flex border-primary text-primary hover:bg-primary/5">
                                 Ask Question

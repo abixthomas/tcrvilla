@@ -41,7 +41,9 @@ export function PropertyConcierge({ property }) {
                     <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Guide Price</p>
                     <div className="items-baseline flex gap-1">
                         <span className="text-3xl lg:text-4xl font-display font-medium text-primary">
-                            ₹{(price / 100000).toFixed(1)}L
+                            {price >= 10000000
+                                ? `₹ ${(price / 10000000).toFixed(2)} Cr`
+                                : `₹ ${(price / 100000).toFixed(2)} L`}
                         </span>
                         <span className="text-sm text-gray-400 font-light">+ Taxes</span>
                     </div>

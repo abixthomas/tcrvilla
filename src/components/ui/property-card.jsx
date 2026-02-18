@@ -65,7 +65,9 @@ export function PropertyCard({ property, index }) {
                 {/* Price Tag */}
                 <div className="absolute bottom-4 left-4 text-white z-10">
                     <span className="text-2xl font-bold font-display tracking-tight text-white drop-shadow-md">
-                        ₹{(property.price / 100000).toFixed(1)}L
+                        {property.price >= 10000000
+                            ? `₹ ${(property.price / 10000000).toFixed(2)} Cr`
+                            : `₹ ${(property.price / 100000).toFixed(2)} L`}
                     </span>
                 </div>
             </div>

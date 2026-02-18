@@ -73,7 +73,7 @@ export function PropertyHighlights({ property }) {
                 </div>
 
                 <div className="mb-12 max-w-2xl">
-                    <h3 className="text-3xl md:text-4xl font-display font-medium text-gray-900 mb-4">
+                    <h3 className="text-3xl md:text-4xl font-display font-medium text-primary mb-4">
                         Curated for the <span className="text-gradient-elite">Exceptional.</span>
                     </h3>
                     <p className="text-gray-500 font-light leading-relaxed">
@@ -100,7 +100,7 @@ export function PropertyHighlights({ property }) {
                                 </div>
 
                                 <div>
-                                    <h4 className="font-display text-xl font-semibold text-gray-900 mb-2">{feature.title}</h4>
+                                    <h4 className="font-display text-xl font-semibold text-primary mb-2">{feature.title}</h4>
                                     <p className="text-gray-600 text-sm font-light leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
                                         {feature.desc}
                                     </p>

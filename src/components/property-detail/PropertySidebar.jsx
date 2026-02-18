@@ -28,7 +28,16 @@ export function PropertySidebar({ property }) {
 
                     <div className="pt-4 border-t border-gray-100">
                         <span className="text-xs font-bold uppercase text-gray-400 block mb-1">Price</span>
-                        <span className="text-3xl font-bold text-secondary">₹ {(property.price).toLocaleString('en-IN')}</span>
+                        {/* Formatted Price Display */}
+                        <span className="text-3xl font-bold text-secondary">
+                            {(() => {
+                                const price = property.price
+                                if (price >= 10000000) {
+                                    return `₹ ${(price / 10000000).toFixed(2)} Cr`
+                                }
+                                return `₹ ${(price / 100000).toFixed(2)} L`
+                            })()}
+                        </span>
                         <span className="text-[10px] text-gray-400 block mt-1">*Price excludes registration fees</span>
                     </div>
                 </div>

@@ -79,8 +79,8 @@ export function Navbar() {
                 className={cn(
                     "fixed left-0 right-0 z-50 transition-all duration-500",
                     isScrolled
-                        ? "top-0 bg-white/95 backdrop-blur-md shadow-lg py-3"
-                        : "top-10 bg-gradient-to-b from-black/80 via-black/40 to-transparent py-6"
+                        ? "top-0 bg-white/95 backdrop-blur-md shadow-lg py-3 border-b border-gray-100"
+                        : "top-10 bg-gradient-to-b from-primary/90 via-primary/40 to-transparent py-6"
                 )}
             >
                 <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
@@ -113,8 +113,8 @@ export function Navbar() {
                                     isActive(item)
                                         ? "text-white bg-primary shadow-md"
                                         : isScrolled
-                                            ? "text-gray-600 hover:text-primary hover:bg-gray-100"
-                                            : "text-white/90 hover:bg-white/20 hover:text-white"
+                                            ? "text-gray-600 hover:text-primary hover:bg-gray-50"
+                                            : "text-white/90 hover:bg-white/10 hover:text-white"
                                 )}
                             >
                                 <span className="relative z-10">{item.name}</span>
