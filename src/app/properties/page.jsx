@@ -17,6 +17,22 @@ import { PropertiesHero } from "@/components/sections/PropertiesHero"
 export default function PropertiesPage() {
     const searchParams = useSearchParams()
 
+    // Force Scroll to Top on Mount & Prevent Restoration Lag
+    useEffect(() => {
+        // Prevent browser from restoring scroll position which causes a "jump" or "lag"
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        window.scrollTo(0, 0);
+
+        return () => {
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'auto';
+            }
+        }
+    }, [])
+
     // Filter State
     const [filters, setFilters] = useState({
         type: null,
@@ -117,7 +133,7 @@ export default function PropertiesPage() {
                         <motion.aside
                             initial={{ width: 0, opacity: 0 }}
                             animate={{
-                                width: "25%",
+                                width: "20%",
                                 opacity: 1,
                                 transition: {
                                     type: "spring",
@@ -134,9 +150,9 @@ export default function PropertiesPage() {
                                     ease: "easeInOut"
                                 }
                             }}
-                            className="hidden lg:block bg-white border-r border-gray-200 h-[calc(100vh-6rem)] sticky top-24 z-30 overflow-hidden shrink-0"
+                            className="hidden lg:block h-[calc(100vh-6rem)] sticky top-24 z-30 overflow-hidden shrink-0"
                         >
-                            <div className="w-full h-full min-w-[300px]">
+                            <div className="w-full h-full">
                                 <PropertyFilterPanel
                                     filters={filters}
                                     setFilters={setFilters}

@@ -14,7 +14,8 @@ const navItems = [
     { name: "Properties", href: "/properties" },
     { name: "Services", href: "/#services" },
     { name: "NRI Corner", href: "/#nri-corner" },
-    { name: "About", href: "/#about" },
+    { name: "About", href: "/about" },
+    { name: "Journal", href: "/journal" },
     { name: "Contact", href: "/#contact" },
 ]
 

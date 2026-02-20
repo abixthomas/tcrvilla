@@ -58,41 +58,71 @@ const useDragScroll = () => {
     const ref = useRef(null)
     const dragInfo = useRef({ isDown: false, startY: 0, scrollTop: 0, wasDragging: false })
 
-    const onPointerDown = (e) => {
-        ref.current.setPointerCapture(e.pointerId)
-        dragInfo.current.isDown = true
-        dragInfo.current.startY = e.clientY
-        dragInfo.current.scrollTop = ref.current.scrollTop
-        dragInfo.current.wasDragging = false
-        ref.current.style.cursor = 'grabbing'
-        ref.current.style.userSelect = 'none'
-    }
+    useEffect(() => {
+        const element = ref.current;
+        if (!element) return;
 
-    const onPointerUp = (e) => {
-        dragInfo.current.isDown = false
-        if (ref.current) {
-            ref.current.style.cursor = 'grab'
-            ref.current.style.removeProperty('user-select')
-            ref.current.releasePointerCapture(e.pointerId)
+        const onPointerDown = (e) => {
+            // Don't drag if clicking a button or interactable interaction
+            // (Optional refinement, but raw drag usually okay if threshold used)
+            dragInfo.current.isDown = true
+            dragInfo.current.startY = e.clientY
+            dragInfo.current.scrollTop = element.scrollTop
+            dragInfo.current.wasDragging = false
+
+            // element.setPointerCapture(e.pointerId) // REMOVED: Breaks clicks
+
+            element.style.cursor = 'grabbing'
+            element.style.userSelect = 'none'
+
+            window.addEventListener('pointermove', onPointerMove)
+            window.addEventListener('pointerup', onPointerUp)
+            window.addEventListener('pointercancel', onPointerUp)
         }
-    }
 
-    const onPointerMove = (e) => {
-        if (!dragInfo.current.isDown) return
-        e.preventDefault()
-        const walk = (e.clientY - dragInfo.current.startY) * 1.5
-        if (Math.abs(walk) > 5) dragInfo.current.wasDragging = true
-        ref.current.scrollTop = dragInfo.current.scrollTop - walk
-    }
+        const onPointerMove = (e) => {
+            if (!dragInfo.current.isDown) return
+            // e.preventDefault() // REMOVED: Aggressive
+
+            const diff = e.clientY - dragInfo.current.startY
+            if (Math.abs(diff) > 5) {
+                dragInfo.current.wasDragging = true
+                // Only prevent default if we are actually dragging
+                e.preventDefault?.()
+            }
+
+            if (dragInfo.current.wasDragging) {
+                element.scrollTop = dragInfo.current.scrollTop - diff
+            }
+        }
+
+        const onPointerUp = (e) => {
+            dragInfo.current.isDown = false
+            element.style.cursor = 'grab'
+            element.style.removeProperty('user-select')
+
+            window.removeEventListener('pointermove', onPointerMove)
+            window.removeEventListener('pointerup', onPointerUp)
+            window.removeEventListener('pointercancel', onPointerUp)
+
+            // Click handling is implicit: if we didn't drag far, click events fire normally.
+        }
+
+        element.addEventListener('pointerdown', onPointerDown)
+
+        // Initial Cursor
+        element.style.cursor = 'grab'
+
+        return () => {
+            element.removeEventListener('pointerdown', onPointerDown)
+            window.removeEventListener('pointermove', onPointerMove)
+            window.removeEventListener('pointerup', onPointerUp)
+            window.removeEventListener('pointercancel', onPointerUp)
+        }
+    }, [])
 
     return {
         ref,
-        props: {
-            onPointerDown,
-            onPointerUp,
-            onPointerMove,
-            style: { cursor: 'grab' }
-        },
         wasDragging: () => dragInfo.current.wasDragging
     }
 }
@@ -203,7 +233,7 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
             animate="visible"
             exit="exit"
             variants={containerVariants}
-            className="w-full md:w-[360px] h-[calc(100vh-6rem)] flex flex-col bg-white/80 backdrop-blur-xl border-l border-t border-slate-100/40 shadow-2xl relative sticky top-20 rounded-bl-3xl"
+            className="w-full h-full flex flex-col bg-white/80 backdrop-blur-xl border-r border-gray-200 shadow-2xl relative rounded-br-3xl"
         >
             {/* NOISE TEXTURE OVERLAY */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
@@ -236,9 +266,9 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
             {/* SCROLLABLE CONTENT */}
             <div
                 ref={mainPanelScroll.ref}
-                {...mainPanelScroll.props}
+                // {...mainPanelScroll.props} // REMOVED: Hook manages listeners now
                 data-lenis-prevent // Critical: Prevent chaining to parent scroll
-                className="flex-1 overflow-y-auto pl-6 py-6 pr-1 relative z-10 custom-scrollbar touch-pan-y"
+                className="flex-1 overflow-y-auto pl-6 py-6 pr-1 relative z-10 no-scrollbar touch-pan-y overscroll-contain"
             >
                 <Accordion.Root type="multiple" defaultValue={['location', 'price', 'land', 'rooms']} className="space-y-1">
 
@@ -276,8 +306,8 @@ export function PropertyFilterPanel({ filters, setFilters, filteredCount, onClos
                                             </div>
                                             <div
                                                 ref={locationScroll.ref}
-                                                {...locationScroll.props}
-                                                className="max-h-48 overflow-y-auto border border-slate-100 rounded-lg bg-slate-50/50 p-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] touch-pan-y"
+                                                // {...locationScroll.props}
+                                                className="max-h-48 overflow-y-auto border border-slate-100 rounded-lg bg-slate-50/50 p-1 no-scrollbar touch-pan-y overscroll-contain"
                                             >
                                                 {LOCATIONS.filter(l => l.toLowerCase().includes(locSearch.toLowerCase())).map(loc => {
                                                     const isSelected = (filters.locations || []).includes(loc)
