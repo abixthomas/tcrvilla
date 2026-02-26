@@ -16,7 +16,7 @@ const navItems = [
     { name: "NRI Corner", href: "/#nri-corner" },
     { name: "About", href: "/about" },
     { name: "Journal", href: "/journal" },
-    { name: "Contact", href: "/#contact" },
+    { name: "Contact", href: "/contact" },
 ]
 
 export function Navbar({ variant = "default" }) {

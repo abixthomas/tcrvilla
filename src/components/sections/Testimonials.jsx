@@ -84,6 +84,22 @@ export function Testimonials() {
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
 
             <div className="container mx-auto px-4 relative z-10">
+                <style>
+                    {`
+                        .testimonials-swiper .swiper-pagination {
+                            position: relative !important;
+                            bottom: 0 !important;
+                            margin-top: 2rem !important;
+                        }
+                        .testimonials-swiper .swiper-slide {
+                            height: auto !important;
+                        }
+                        .testimonials-swiper .swiper-wrapper {
+                            align-items: stretch;
+                        }
+                    `}
+                </style>
+
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h4 className="text-secondary font-bold uppercase tracking-[0.25em] text-xs mb-3">Testimonials</h4>
                     <h2 className="text-3xl md:text-5xl font-display font-medium text-white mb-6 leading-tight">
@@ -116,7 +132,7 @@ export function Testimonials() {
                             slidesPerView: 3,
                         },
                     }}
-                    className="pb-16"
+                    className="testimonials-swiper"
                 >
                     {testimonials.map((testimonial, index) => (
                         <SwiperSlide key={index}>

@@ -140,7 +140,7 @@ export function HeroSearch({ variant = "default" }) {
                                 />
                             </div>
                         </div>
-                        <div className="max-h-64 overflow-y-auto custom-scrollbar p-1">
+                        <div className="max-h-[60vh] md:max-h-64 overflow-y-auto custom-scrollbar p-1" data-lenis-prevent="true">
                             {LOCATIONS.filter(l => l.toLowerCase().includes(locSearch.toLowerCase())).map(loc => (
                                 <DropdownItem
                                     key={loc}
@@ -199,7 +199,7 @@ export function HeroSearch({ variant = "default" }) {
                     </button>
 
                     <DropdownContent isOpen={openDropdown === 'type'}>
-                        <div className="p-1">
+                        <div className="max-h-[60vh] md:max-h-64 overflow-y-auto custom-scrollbar p-1" data-lenis-prevent="true">
                             {PROPERTY_TYPES.map(type => (
                                 <DropdownItem
                                     key={type}
@@ -258,7 +258,12 @@ export function HeroSearch({ variant = "default" }) {
                     </button>
 
                     <DropdownContent isOpen={openDropdown === 'price'}>
-                        <div className="p-1">
+                        <div
+                            className="max-h-[220px] overflow-y-auto custom-scrollbar p-1"
+                            data-lenis-prevent="true"
+                            onWheel={(e) => e.stopPropagation()}
+                            onTouchMove={(e) => e.stopPropagation()}
+                        >
                             {PRICE_RANGES.map(range => (
                                 <DropdownItem
                                     key={range.label}

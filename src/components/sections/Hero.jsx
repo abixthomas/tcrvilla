@@ -22,7 +22,6 @@ export function Hero() {
     const bgRef = useRef(null)
     const textRef = useRef(null)
     const searchRef = useRef(null)
-    const statsRef = useRef(null)
 
     useGSAP(() => {
         // Parallax Background
@@ -55,12 +54,6 @@ export function Hero() {
         gsap.fromTo(searchRef.current,
             { scale: 0.9, opacity: 0 },
             { scale: 1, opacity: 1, duration: 1, ease: "power3.out", delay: 0.8 }
-        )
-
-        // Stats Reveal
-        gsap.fromTo(statsRef.current,
-            { y: 50, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, ease: "power2.out", delay: 1 }
         )
 
     }, { scope: containerRef })
@@ -154,42 +147,9 @@ export function Hero() {
                         <HeroSearch />
                     </div>
 
-                    {/* Integrated Stats Bar */}
-                    <div
-                        ref={statsRef}
-                        className="mt-16 hidden md:grid grid-cols-3 divide-x divide-white/10 bg-black/20 backdrop-blur-md border border-white/10 rounded-full px-8 py-6 w-full max-w-3xl shadow-2xl"
-                    >
-                        {[
-                            { label: "Active Listings", value: "500+" },
-                            { label: "Trusted Agents", value: "50+" },
-                            { label: "Happy Families", value: "1.2k+" },
-                        ].map((stat, i) => (
-                            <div key={i} className="px-8 text-center group hover:bg-white/5 transition-colors rounded-lg py-2">
-                                <div className="text-4xl font-display font-medium text-white mb-1 group-hover:text-secondary transition-colors">
-                                    {stat.value}
-                                </div>
-                                <div className="text-[10px] font-medium text-gray-400 uppercase tracking-widest">
-                                    {stat.label}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
                 </div>
             </div>
 
-            {/* Pagination Dots */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-                {HERO_IMAGES.map((_, idx) => (
-                    <button
-                        key={idx}
-                        onClick={() => setCurrentImage(idx)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${currentImage === idx ? "w-8 bg-secondary" : "bg-white/50 hover:bg-white"
-                            }`}
-                        aria-label={`Go to slide ${idx + 1}`}
-                    />
-                ))}
-            </div>
         </section >
     )
 }
