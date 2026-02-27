@@ -88,7 +88,7 @@ export function Hero() {
                     loading="eager"
                     priority="true"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/60" />
+
             </div>
 
             {/* Dynamic Background Slider - Stacked Approach */}
@@ -111,7 +111,7 @@ export function Hero() {
                             loading="eager"
                             className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/60" />
+
                     </div>
                 ))}
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-20" />

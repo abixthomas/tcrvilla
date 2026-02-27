@@ -83,9 +83,7 @@ export function Navbar({ variant = "default" }) {
                         ? "top-0 bg-white/95 backdrop-blur-md shadow-lg py-3 border-b border-gray-100"
                         : cn(
                             "top-0 pt-4 md:pt-14 pb-6",
-                            variant === "transparent"
-                                ? "bg-transparent"
-                                : "bg-gradient-to-b from-primary/90 via-primary/40 to-transparent"
+                            "bg-transparent"
                         )
                 )}
             >
@@ -115,12 +113,12 @@ export function Navbar({ variant = "default" }) {
                                     }
                                 }}
                                 className={cn(
-                                    "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group overflow-hidden",
+                                    "px-4 py-2 text-sm font-bold transition-all duration-300 relative group",
                                     isActive(item)
-                                        ? "text-white bg-primary shadow-md"
+                                        ? "text-white bg-primary rounded-full shadow-lg"
                                         : isScrolled
-                                            ? "text-gray-600 hover:text-primary hover:bg-gray-50"
-                                            : "text-white/90 hover:bg-white/10 hover:text-white"
+                                            ? "text-gray-800 hover:text-primary hover:bg-gray-50 rounded-full"
+                                            : "text-white hover:text-gray-200 [text-shadow:0_2px_10px_rgba(0,0,0,0.8)]"
                                 )}
                             >
                                 <span className="relative z-10">{item.name}</span>

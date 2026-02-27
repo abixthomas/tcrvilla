@@ -15,7 +15,7 @@ export function JournalHero() {
     const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
     return (
-        <section ref={containerRef} className="relative h-[65vh] overflow-hidden bg-[#1E3A8A] text-white">
+        <section ref={containerRef} className="relative overflow-hidden bg-[#1E3A8A] text-white h-[60vh] min-h-[550px]">
             {/* Parallax Background */}
             <motion.div
                 style={{ y, opacity }}
@@ -26,35 +26,28 @@ export function JournalHero() {
                     alt="Architectural Abstract"
                     className="w-full h-full object-cover object-center"
                 />
-                {/* Overlay removed per user request for brightness/readability */}
+
             </motion.div>
 
-            {/* Content Content - Brutalist Luxury */}
-            <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center pt-32 pb-16">
+            {/* Content - Brutalist Luxury */}
+            <div className="relative z-20 container mx-auto px-6 md:px-12 w-full h-full pt-36 md:pt-48 pb-12">
                 <motion.div
-                    initial={{ opacity: 0, y: 50 }}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                    className="max-w-4xl drop-shadow-2xl mt-12"
+                    className="max-w-4xl text-left"
                 >
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="h-[2px] w-12 bg-[#EF4444]" />
-                        <span className="uppercase tracking-[0.3em] text-sm font-bold text-white drop-shadow-md">The Journal</span>
+                    <div className="flex justify-start mb-4">
+                        <span className="inline-block text-[#EF4444] font-bold tracking-[0.3em] uppercase text-xs drop-shadow-md">Since 1998</span>
                     </div>
 
-                    <h1 className="text-6xl md:text-8xl font-display font-medium leading-[1.1] mb-8 tracking-tight drop-shadow-lg text-white">
-                        Curated Perspectives on <br />
-                        <span className="italic font-light text-slate-100">Modern Living.</span>
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-medium mb-4 leading-tight text-white drop-shadow-2xl">
+                        Crafting <span className="italic text-[#EF4444] font-serif">Legacies</span>
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-white max-w-2xl font-light leading-relaxed mb-12 drop-shadow-md">
-                        An editorial deep dive into design philosophy, architectural trends, and the art of crafting legacy.
+                    <p className="text-base md:text-lg text-white max-w-xl font-medium leading-relaxed drop-shadow-xl">
+                        We don't just build homes; we curate the future of luxury living in the cultural capital of Kerala.
                     </p>
-
-                    <div className="flex gap-4">
-                        <span className="text-xs font-mono text-white border border-white/40 px-3 py-1 rounded-full drop-shadow-sm bg-black/20 backdrop-blur-sm">ISSUE 01</span>
-                        <span className="text-xs font-mono text-white border border-white/40 px-3 py-1 rounded-full drop-shadow-sm bg-black/20 backdrop-blur-sm">EST. 2024</span>
-                    </div>
                 </motion.div>
             </div>
         </section>

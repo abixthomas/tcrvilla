@@ -6,11 +6,7 @@ export function PropertiesHero() {
     return (
         <section className="relative h-[40vh] min-h-[400px] overflow-hidden bg-[#0f172a] flex items-end pb-12">
 
-            {/* Background Texture (Subtle Mesh - Reduced intensity) */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-secondary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
-            </div>
+            {/* Background Texture Removed */}
 
             <div className="container mx-auto px-4 relative z-10 flex flex-col justify-center items-center h-full pt-44 pb-6 text-center">
 
