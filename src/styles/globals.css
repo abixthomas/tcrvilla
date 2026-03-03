@@ -1,230 +1,446 @@
 @import "tailwindcss";
 
 @theme {
-  /* Design Tokens - Architect Balanced Theme (Professional & Standard) */
-  /* Primary: Deep Navy Blue - From 'Our Latest Properties' (Trust, Structure, Easy on Eyes) */
-  --color-primary: #1E3A8A;
+  /* ============================================================
+     THRISSUR LANDS — ULTRA LUXURY DESIGN SYSTEM
+     Primary: Deep Royal Navy | Secondary: Crimson Red | Gold Accent
+  ============================================================ */
+
+  /* Core Brand Colors */
+  --color-primary:           #1A3A6B;
+  --color-primary-light:     #2451A0;
+  --color-primary-dark:      #0D1F3C;
   --color-primary-foreground: #FFFFFF;
 
-  /* Secondary: Premium Brand Red - Updated to exact Logo Red */
-  --color-secondary: #ef4444;
+  --color-secondary:         #C8341E;
+  --color-secondary-light:   #E04530;
+  --color-secondary-dark:    #9B260F;
   --color-secondary-foreground: #FFFFFF;
 
-  --color-tertiary: #10B981;
-  /* Emerald for success states */
-  --color-tertiary-foreground: #FFFFFF;
+  --color-gold:              #C9A84C;
+  --color-gold-light:        #E4C76B;
+  --color-gold-dark:         #9F7E35;
+  --color-gold-foreground:   #0D1F3C;
 
-  --color-background: #FAFAFA;
-  --color-foreground: #2D3436;
+  /* Surface & Background */
+  --color-background:        #F7F4EF;
+  --color-surface:           #FFFFFF;
+  --color-surface-2:         #F0EDE8;
+  --color-dark:              #0D1F3C;
+  --color-dark-2:            #152B50;
+  --color-foreground:        #1C1C1E;
+  --color-foreground-muted:  #6B7280;
 
-  --color-muted: #F3F4F6;
-  --color-muted-foreground: #6B7280;
+  /* UI Colors */
+  --color-muted:             #EDE9E2;
+  --color-muted-foreground:  #9CA3AF;
+  --color-border:            #DDD8CE;
+  --color-ring:              #C9A84C;
 
-  --color-border: #E0E0E0;
-  --color-input: #E0E0E0;
+  /* Status */
+  --color-success:           #059669;
+  --color-warning:           #D97706;
+  --color-error:             #DC2626;
 
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-error: #EF4444;
-  /* Coral */
-  --color-destructive: #EF4444;
-  --color-destructive-foreground: #FFFFFF;
+  /* Typography */
+  --font-sans:        var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-display:     var(--font-cormorant), "Cormorant Garamond", "Georgia", serif;
+  --font-interface:   var(--font-montserrat), "Montserrat", sans-serif;
 
-  /* Typography Stack */
-  --font-sans: var(--font-sans), "Inter", system-ui, sans-serif;
-  --font-interface: var(--font-interface), "Montserrat", sans-serif;
-  --font-display: var(--font-luxury), "Playfair Display", serif;
-  --font-luxury: var(--font-luxury), "Playfair Display", serif;
-  /* Alias for safety */
+  /* Border Radius */
+  --radius-xs:   0.25rem;
+  --radius-sm:   0.375rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-2xl:  1.5rem;
+  --radius-full: 9999px;
 
-  --radius-lg: 0.5rem;
-  --radius-md: 0.375rem;
-  --radius-sm: 0.25rem;
-
-  /* Fluid Typography Variables usually handled by utility config, but setting defaults here if needed */
+  /* Shadows */
+  --shadow-elegant: 0 4px 24px -2px rgba(13, 31, 60, 0.12), 0 2px 8px -2px rgba(13, 31, 60, 0.08);
+  --shadow-luxury:  0 20px 60px -10px rgba(13, 31, 60, 0.25), 0 8px 20px -5px rgba(13, 31, 60, 0.15);
+  --shadow-gold:    0 0 30px rgba(201, 168, 76, 0.35);
+  --shadow-card:    0 8px 30px -5px rgba(13, 31, 60, 0.12);
 
   /* Animations */
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-float:         float 6s ease-in-out infinite;
+  --animate-pulse-glow:    pulse-glow 2.5s ease-in-out infinite;
+  --animate-shimmer-gold:  shimmer-gold 2s linear infinite;
+  --animate-fade-up:       fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in:       fade-in 0.5s ease both;
+  --animate-reveal:        reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-scale-in:      scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-marquee:       marquee 30s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-12px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.4); }
+    50%       { box-shadow: 0 0 0 16px rgba(201, 168, 76, 0); }
+  }
+
+  @keyframes shimmer-gold {
+    0%   { transform: translateX(-100%) skewX(-15deg); }
+    100% { transform: translateX(300%) skewX(-15deg); }
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(48px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.88); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes marquee {
+    0%   { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
 
   @keyframes accordion-down {
-    from {
-      height: 0
-    }
-
-    to {
-      height: var(--radix-accordion-content-height)
-    }
+    from { height: 0 }
+    to   { height: var(--radix-accordion-content-height) }
   }
 
   @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height)
-    }
-
-    to {
-      height: 0
-    }
+    from { height: var(--radix-accordion-content-height) }
+    to   { height: 0 }
   }
 
-  --animate-marquee: marquee 25s linear infinite;
-  --animate-marquee2: marquee2 25s linear infinite;
-
-  @keyframes marquee {
-    0% {
-      transform: translateX(0%);
-    }
-
-    100% {
-      transform: translateX(-100%);
-    }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
   }
 
-  @keyframes marquee2 {
-    0% {
-      transform: translateX(100%);
-    }
-
-    100% {
-      transform: translateX(0%);
-    }
-  }
-
-  /* Shimmer Animation for Premium Effects */
-  --animate-shimmer: shimmer 1.5s infinite;
-
-  @keyframes shimmer {
-    0% {
-      transform: translateX(-100%);
-    }
-
-    100% {
-      transform: translateX(100%);
-    }
+  @keyframes border-pulse {
+    0%, 100% { border-color: rgba(201, 168, 76, 0.3); }
+    50%       { border-color: rgba(201, 168, 76, 0.9); }
   }
 }
 
-/*@tailwind base;
-@tailwind components;
-@tailwind utilities;*/
-
-/* CRITICAL LOGO PROTECTION */
-img[alt*="Thrissur Villas"] {
-  background: transparent !important;
-  -webkit-background-clip: border-box !important;
-  background-clip: border-box !important;
-  filter: none !important;
-  -webkit-filter: none !important;
-  box-shadow: none !important;
-  mix-blend-mode: normal !important;
-}
-
-/* Base Styles */
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-/* Custom Range Slider Thumb Styles */
-.range-slider-thumb::-webkit-slider-thumb {
-  pointer-events: auto;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  /* Visual styling to make it match the design if needed, 
-     but we are using opacity-0 inputs on top of visual divs.
-     However, keeping standard dimensions helps hit-testing. */
-  width: 1rem;
-  height: 1rem;
-}
-
-.range-slider-thumb::-moz-range-thumb {
-  pointer-events: auto;
-  cursor: pointer;
-  width: 1rem;
-  height: 1rem;
-}
-
+/* ============================================================
+   BASE LAYER
+============================================================ */
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    /* FAFAFA */
-    --foreground: 210 9% 19%;
-    /* 2D3436 converted approx or just use hex above via theme */
-    /* Note: Tailwind v4 theme variables are used directly as CSS variables if defined in @theme. 
-       However, shadcn usually expects HSL variables for opacity modifiers. 
-       For this prompt, I will stick to the Hex definitions in @theme for simplicity unless I need opacity.
-       The user wants specific hex codes.
-    */
+    --background: 37 20% 95%;
+    --foreground: 220 10% 11%;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased subpixel-antialiased;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-x: hidden;
   }
 
-  p {
-    @apply leading-[1.6] md:leading-normal;
-  }
-
-  /* Global Heading Styles - Elite Editorial Look */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-display font-medium text-primary leading-tight tracking-tight;
+  /* Headings — Editorial Luxury */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.15;
     letter-spacing: -0.02em;
-    /* Tighter editorial look */
     text-wrap: balance;
-    font-feature-settings: "pnum" on, "lnum" on;
+    color: var(--color-primary-dark);
   }
 
-  /* Fluid Typography - Simple Implementations for H1/H2 */
-  h1 {
-    font-size: clamp(2rem, 5vw, 4rem);
+  h1 { font-size: clamp(2.5rem, 6vw, 5rem); }
+  h2 { font-size: clamp(1.9rem, 4vw, 3.25rem); }
+  h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+  h4 { font-size: clamp(1.1rem, 1.8vw, 1.5rem); }
+
+  p  { line-height: 1.75; color: var(--color-foreground-muted); }
+
+  a  { text-decoration: none; color: inherit; }
+
+  img, video { display: block; max-width: 100%; }
+
+  button { cursor: pointer; font-family: inherit; }
+
+  input, textarea, select {
+    font-family: inherit;
+    outline: none;
   }
 
-  h2 {
-    font-size: clamp(1.8rem, 4vw, 3rem);
-  }
-
-  /* UI Text Defaults */
-  .font-interface {
-    font-family: var(--font-interface);
-  }
-
-  /* Exact Gradient Styling for Emphasized H2s */
-  .text-gradient-elite {
-    @apply font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary;
-    /* Increased padding to prevent clip cut-off on italics, especially at line ends */
-    padding-right: 0.2em;
-    padding-bottom: 0.1em;
-    /* Safety for descenders */
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-dark);
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* ============================================================
+   CUSTOM SCROLLBAR
+============================================================ */
+::-webkit-scrollbar         { width: 6px; height: 6px; }
+::-webkit-scrollbar-track   { background: var(--color-muted); }
+::-webkit-scrollbar-thumb   {
+  background: linear-gradient(180deg, var(--color-gold), var(--color-primary));
+  border-radius: 999px;
 }
+::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
-}
-
+/* ============================================================
+   UTILITY CLASSES
+============================================================ */
 @layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+
+  /* No scrollbar */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Text Gradient */
+  .text-gradient-navy {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  .text-gradient-gold {
+    background: linear-gradient(135deg, var(--color-gold-dark) 0%, var(--color-gold-light) 50%, var(--color-gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-hero {
+    background: linear-gradient(135deg, #FFFFFF 0%, rgba(255,255,255,0.85) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Backgrounds */
+  .bg-gradient-navy {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 60%, var(--color-primary-light) 100%);
+  }
+
+  .bg-gradient-hero {
+    background: linear-gradient(160deg,
+      rgba(13, 31, 60, 0.92) 0%,
+      rgba(26, 58, 107, 0.75) 50%,
+      rgba(26, 58, 107, 0.3) 100%
+    );
+  }
+
+  .bg-gradient-section {
+    background: linear-gradient(180deg, var(--color-background) 0%, var(--color-surface-2) 100%);
+  }
+
+  .bg-texture-warm {
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(at 20% 30%, rgba(201, 168, 76, 0.06) 0px, transparent 50%),
+      radial-gradient(at 80% 70%, rgba(26, 58, 107, 0.06) 0px, transparent 50%);
+  }
+
+  /* Gold Shimmer Button Overlay */
+  .shimmer-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: none;
+  }
+  .shimmer-overlay:hover::after {
+    animation: shimmer-gold 0.6s ease forwards;
+  }
+
+  /* Glass Morphism */
+  .glass-light {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-dark {
+    background: rgba(13, 31, 60, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Section spacing */
+  .section-py  { padding-top: clamp(4rem, 8vw, 8rem); padding-bottom: clamp(4rem, 8vw, 8rem); }
+  .section-px  { padding-left: clamp(1.25rem, 5vw, 2.5rem); padding-right: clamp(1.25rem, 5vw, 2.5rem); }
+
+  /* Gold line decoration */
+  .gold-line::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-gold), transparent);
+    margin-top: 0.75rem;
+    border-radius: 999px;
+  }
+
+  .gold-line-center::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    margin: 0.75rem auto 0;
+    border-radius: 999px;
+  }
+
+  /* Cultural motif background pattern */
+  .pattern-kerala {
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        rgba(201, 168, 76, 0.04) 0px,
+        rgba(201, 168, 76, 0.04) 1px,
+        transparent 1px,
+        transparent 50%
+      );
+    background-size: 30px 30px;
+  }
+
+  /* Range slider */
+  .range-slider-thumb::-webkit-slider-thumb {
+    pointer-events: auto;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: var(--color-gold);
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .range-slider-thumb::-moz-range-thumb {
+    pointer-events: auto;
+    cursor: pointer;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: var(--color-gold);
+    border: 2px solid white;
+  }
+
+  /* Text balance */
+  .text-balance { text-wrap: balance; }
+
+  /* Clip path for diagonal sections */
+  .clip-diagonal-down {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+  }
+  .clip-diagonal-up {
+    clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+  }
+
+  /* Animate classes */
+  .animate-float       { animation: var(--animate-float); }
+  .animate-pulse-glow  { animation: var(--animate-pulse-glow); }
+  .animate-fade-up     { animation: var(--animate-fade-up); }
+  .animate-fade-in     { animation: var(--animate-fade-in); }
+  .animate-marquee     { animation: var(--animate-marquee); }
+
+  /* Custom cursor hide on touch */
+  @media (hover: none) {
+    .custom-cursor { display: none !important; }
+  }
+
+  /* Prose styles for blog */
+  .prose-luxury {
+    max-width: 72ch;
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: var(--color-foreground);
+  }
+  .prose-luxury h2 {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    margin-top: 2.5em;
+    margin-bottom: 0.75em;
+  }
+  .prose-luxury h3 {
+    font-size: clamp(1.2rem, 2vw, 1.65rem);
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+  }
+  .prose-luxury p  { margin-bottom: 1.5em; }
+  .prose-luxury ul { padding-left: 1.5em; margin-bottom: 1.5em; list-style: disc; }
+  .prose-luxury li { margin-bottom: 0.4em; }
+  .prose-luxury blockquote {
+    border-left: 4px solid var(--color-gold);
+    padding: 1em 1.5em;
+    margin: 2em 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2em;
+    color: var(--color-primary);
+    background: var(--color-surface-2);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  }
+  .prose-luxury img {
+    border-radius: var(--radius-xl);
+    margin: 2em 0;
+    width: 100%;
+    object-fit: cover;
+  }
+  .prose-luxury .drop-cap::first-letter {
+    font-family: var(--font-display);
+    font-size: 4.5em;
+    font-weight: 700;
+    float: left;
+    line-height: 0.8;
+    margin: 0.075em 0.125em 0 0;
+    color: var(--color-primary);
+  }
+
+  /* Accordion */
+  .animate-accordion-down { animation: accordion-down 0.2s ease-out; }
+  .animate-accordion-up   { animation: accordion-up   0.2s ease-out; }
+
+  /* Loading skeleton */
+  .skeleton {
+    background: linear-gradient(90deg,
+      var(--color-muted) 25%,
+      var(--color-surface-2) 50%,
+      var(--color-muted) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer-gold 1.5s infinite;
+    border-radius: var(--radius-md);
   }
 }

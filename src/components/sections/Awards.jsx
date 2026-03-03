@@ -25,18 +25,6 @@ export function Awards() {
                         </div>
                     ))}
                 </div>
-
-                <div
-                    className="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center gap-32 pr-32 group-hover:[animation-play-state:paused]"
-                    style={{ animationDuration: "60s" }}
-                >
-                    {partners.concat(partners).map((partner, i) => (
-                        <div key={i} className="flex items-center gap-4 text-white/40 font-bold text-3xl font-display hover:text-white transition-colors cursor-default">
-                            <Award className="h-8 w-8 opacity-50" />
-                            {partner}
-                        </div>
-                    ))}
-                </div>
             </div>
         </section>
     )

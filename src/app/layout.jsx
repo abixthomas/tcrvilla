@@ -1,36 +1,55 @@
-
-import { Inter, Montserrat, Playfair_Display } from "next/font/google"; // Swapped Open_Sans for Inter
+import { Inter, Montserrat, Cormorant_Garamond } from "next/font/google";
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
-
 import { Footer } from "@/components/layout/Footer";
 import { LenisProvider } from "@/components/providers/LenisProvider";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { WhatsAppFAB } from "@/components/ui/WhatsAppFAB";
 
-// Body Component - Tall x-height for max legibility
 const inter = Inter({
-  variable: "--font-sans",
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
 
-// Interface Component - Geometric for UI Controls
 const montserrat = Montserrat({
-  variable: "--font-interface", // Renamed from serif to specific UI role
+  variable: "--font-montserrat",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-// Heading Component - Editorial Serif
-const playfair = Playfair_Display({
-  variable: "--font-luxury", // Renamed for clarity
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata = {
-  title: "Thrissur Villas | Premium Real Estate",
-  description: "The most trusted real estate platform in Thrissur. Buy, sell, and rent luxury properties.",
+  title: {
+    default: "Thrissur Lands | Premium Land Deals in Thrissur, Kerala",
+    template: "%s | Thrissur Lands",
+  },
+  description:
+    "Discover premium land plots for sale in Thrissur, Kerala. Residential, commercial, and investment properties with expert guidance. Your trusted land partner in the cultural capital of Kerala.",
+  keywords: [
+    "land for sale thrissur",
+    "plots thrissur kerala",
+    "buy land thrissur",
+    "real estate thrissur",
+    "plots for sale thrissur",
+    "investment land kerala",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    siteName: "Thrissur Lands",
+    title: "Thrissur Lands | Premium Land Deals",
+    description: "Your trusted partner for premium land deals in Thrissur, Kerala.",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -38,18 +57,18 @@ export default function RootLayout({ children }) {
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased subpixel-antialiased", // Added subpixel-antialiased
+          "min-h-screen bg-background font-sans antialiased subpixel-antialiased overflow-x-hidden",
           inter.variable,
           montserrat.variable,
-          playfair.variable
+          cormorant.variable
         )}
       >
         <LenisProvider>
+          <CustomCursor />
           <Navbar />
-          <main className="min-h-screen">
-            {children}
-          </main>
+          <main className="min-h-screen">{children}</main>
           <Footer />
+          <WhatsAppFAB />
         </LenisProvider>
       </body>
     </html>
